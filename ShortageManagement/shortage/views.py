@@ -23,6 +23,7 @@ from shortage.models import *
 
 
 def upload(request):
+    #Delete all data before upload
     MB52.objects.all().delete()
     SE16N_CEPC.objects.all().delete()
     SE16N_T001L.objects.all().delete()
@@ -34,33 +35,33 @@ def upload(request):
     ZPP_MD_Stock.objects.all().delete()
     uploaded_files(request)  #call function to upload files
     return redirect ('files_list')
-   
 
- #Upload Files and check if exist   
+#Upload Files and check if exist   
 def uploaded_files(request):
     #connection to DB 
         try:
-            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='sahar',port='5432') 
-            file_mb52=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MB52 ALL.xlsx')
-            file_se16ncepc=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\cepc.xlsx')
-            file_se16nt001l=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T001l.xlsx')
-            file_se16nt024=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T024.xlsx')
-            file_zmm=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
-            file_st=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\stock_transit.xlsx')
-            file_art=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
-            file_md=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MDMA.xlsx')
-            zpp_md_stock=[ 
-                r'C:\Users\bibas\Downloads\Input SAP\BEL MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\CAN MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\CAS MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\COL MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\FOU MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\HBG MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\LAB MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\LEC MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\LIP MD STOCK.xlsx',
-                r'C:\Users\bibas\Downloads\Input SAP\MEX MD STOCK.xlsx'
-            ]
+            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='054Ibiza',port='5432') 
+            file_mb52=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MB52 ALL.xlsx')
+            file_se16ncepc=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\cepc.xlsx')
+            file_se16nt001l=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T001l.xlsx')
+            file_se16nt024=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T024.xlsx')
+            file_zmm=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
+            file_st=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\stock_transit.xlsx')
+            file_art=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
+            file_md=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MDMA.xlsx')
+            zpp_md_stock={
+                "2500":r"C:\Users\L0005082\Documents\Input SAP\BEL MD STOCK.xlsx",
+                "2600":r"C:\Users\L0005082\Documents\Input SAP\CAN MD STOCK.xlsx",
+                "2400":r"C:\Users\L0005082\Documents\Input SAP\CAS MD STOCK.xlsx",
+                "2010":r"C:\Users\L0005082\Documents\Input SAP\COL MD STOCK.xlsx",
+                "2110":r"C:\Users\L0005082\Documents\Input SAP\FOU MD STOCK.xlsx",
+                "2200":r"C:\Users\L0005082\Documents\Input SAP\HBG MD STOCK.xlsx",
+                "2000":r"C:\Users\L0005082\Documents\Input SAP\LAB MD STOCK.xlsx",
+                "2030":r"C:\Users\L0005082\Documents\Input SAP\LEC MD STOCK.xlsx",
+                "2020":r"C:\Users\L0005082\Documents\Input SAP\LIP MD STOCK.xlsx",
+                "2300":r"C:\Users\L0005082\Documents\Input SAP\MEX MD STOCK.xlsx"
+            } 
+
             #User name
             uploded_by =1
             #Date time for upload files
@@ -70,19 +71,19 @@ def uploaded_files(request):
             #week
             week=datetime.now().strftime("%W")
             #control statment to check if files exists    
-            if (file_mb52.exists()and file_se16ncepc.exists() and file_se16nt001l.exists() and file_se16nt024.exists() and file_zmm.exists() and file_st.exists() and file_art.exists() and file_md.exists()):
+            if (file_mb52.exists()   and  file_se16ncepc.exists() and file_se16nt001l.exists() and file_se16nt024.exists() and file_zmm.exists() and file_st.exists() and file_art.exists() and file_md.exists()):
                 import_file_MB52(conn,file_mb52,year,week,uploded_by,uploded_at)
                 import_file_SE16N_CEPC(conn,file_se16ncepc,year,week,uploded_by,uploded_at)
                 import_file_SE16N_T001L(conn,file_se16nt001l,year,week,uploded_by,uploded_at)
                 import_file_SE16N_T024(conn,file_se16nt024,year,week,uploded_by,uploded_at)
                 import_file_ZMM_CARNET_CDE_IS(conn,file_zmm,year,week,uploded_by,uploded_at)
-                for f in zpp_md_stock:
-                 import_file_ZPP_MD_Stock(conn,f,year,week,uploded_by,uploded_at)
+                for division,file in zpp_md_stock.items():
+                    import_file_ZPP_MD_Stock(conn,division,file,year,week,uploded_by,uploded_at)
                 import_file_Stock_transit(conn,file_st,year,week,uploded_by,uploded_at)
                 import_file_ART_MARA_MARC(conn,file_art,year,week,uploded_by,uploded_at)
                 import_file_MDMA(conn,file_md,year,week,uploded_by,uploded_at)
             else:
-               messages.error(request, 'Files not found')
+                messages.error(request, 'Files not found')
         except OperationalError:
            messages.error(request,'Data base not found')
 
@@ -295,19 +296,19 @@ def import_file_SE16N_T024(con,file,year,week,username,uploaded_at):
             file=SE24,
             table="shortage_se16n_t024",
             columns=[
-               'year',
-               'week',
-               'uploaded_by',
-               'uploaded_at',
-               'purchasing_group',
-               'description_p_group',
-               'tel_no_purch_group', 
-               'output_device',
-               'fax_number',	
-               'telephone',
-               'extension',
-               'e_mail_address',
-               'user_name', 	
+                'year',
+                'week',
+                'uploaded_by',
+                'uploaded_at',
+                'purchasing_group',
+                'description_p_group',
+                'tel_no_purch_group', 
+                'output_device',
+                'fax_number',	
+                'telephone',
+                'extension',
+                'e_mail_address',
+                'user_name', 	
             ],
             null='',
             sep=','
@@ -403,8 +404,8 @@ def import_file_ZMM_CARNET_CDE_IS(con,file,year,week,username,uploaded_at):
     con.commit() 
 
 #function for Import file ZPP_MD_Stock
-def import_file_ZPP_MD_Stock(con,file,year,week,username,uploaded_at):
-      #Read file
+def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
+    #Read file
     df = pd.read_excel(file) # to read file excel
     #insert 2 column year, week
     df.insert(0,'year',year,True)
@@ -412,7 +413,7 @@ def import_file_ZPP_MD_Stock(con,file,year,week,username,uploaded_at):
     #insert 2 column created by, created at
     df.insert(2,'uploaded_by',username,True)
     df.insert(3,'uploaded_at',uploaded_at,True)
-    df.insert(4,'division',22,True)
+    df.insert(4,'division',division,True)
     print(df)
     df=df.to_csv(index=False,header=None) #To convert to csv
     
@@ -424,22 +425,21 @@ def import_file_ZPP_MD_Stock(con,file,year,week,username,uploaded_at):
             file=ZPP,
             table="shortage_zpp_md_stock",
             columns=[
-               'year',
-               'week',
-               'uploaded_by',
-               'uploaded_at',
-               'division',
-               'material',
-               'plan_date',
-               'mrp_element', 
-               'data_for_planning_element',
-               'action_message',	
-               'Input_need',
-               'available_quantity',
-               'reorder_date',
-               'vendor', 	
-               'customer',
-              
+                'year',
+                'week',
+                'uploaded_by',
+                'uploaded_at',
+                'division',
+                'material',
+                'plan_date',
+                'mrp_element', 
+                'data_for_planning_element',
+                'action_message',	
+                'Input_need',
+                'available_quantity',
+                'reorder_date',
+                'vendor', 	
+                'customer',
             ],
             null='',
             sep=','

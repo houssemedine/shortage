@@ -5,7 +5,7 @@ def allowed_users(allowed_roles=[]):
     def decorator(view_func):
         def wrapper_func (request, *args, **kwargs):
             message=''
-            username='bibas'
+            username='l0005082'
             user=User.objects.all().filter(username=username).first()
             if user:
                 if user.is_active:
