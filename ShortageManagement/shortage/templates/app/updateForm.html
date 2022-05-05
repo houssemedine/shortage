@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static%}
+{% load bootstrap_icons %}
+{% block content %}
+
+<a href ="{% url 'core' %}" >{% bs_icon 'arrow-left' size='2em'  %}</a>
+
+      <div class='content'>
+        <div class="container-fuild">
+                <div class='row'>
+                        <div class='col-3'>
+                        </div>
+                        <div class='col-6'>
+                                <div class='card card-primary card-outline'>
+                                        <div class='card-header'>
+                                                <h5>Update Core </h5>
+                                        </div>
+                                        <div class='body'>
+                                                <form method= "POST" class ="form-group" action="{% url 'update_core' core.id %}">
+                                                        <div class="row">
+                                                                <div class ="col-2">
+                                                                </div>
+                                                                <div class="col-8">
+                                                                {% csrf_token %}
+                                                                {{myform|crispy}}
+                                                                <div class="d-flex justify-content-center" style='margin-bottom:10px'>
+                                                                <input type="submit" class='btn btn-primary' value="Update" id ="update">
+                                                                </div>
+
+                                                                </div>
+                                                        </div>
+                                                </form>
+                                                <div class ="col-2">
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <div class='col-3'>
+                </div>
+        </div>
+</div>
+{%endblock %}

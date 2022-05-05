@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+{% block content %}
+<div class="row">
+        <a href ="{%url 'files_list' %}" >{% bs_icon 'arrow-left' size='2em'  %}</a>
+        <div class="col-md-12">
+            <div class="card" style='overflow:auto;width:100%'>
+                <div class="card-header">
+                    <h5 class="m-0">File Details {{namefile}}</h5>
+                </div>
+                <div class="card-body">
+                            <table class="table table-hover table-lg table-bordered ">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Year</th>
+                                        <th scope="col">Week</th>
+                                        <th scope="col">Uploded by</th>
+                                        <th scope="col">Uploded at</th>
+                                        <th scope="col" colspan="2">Action</th>
+                                        </tr>
+                                    </thead>
+                                <tbody>
+                                    {% for data in data %}
+                                    <tr>
+                                            <td>{{data.year}}</td>
+                                            <td>{{data.week}}</td>
+                                            <td>{{data.uploaded_by}}</td>
+                                            <td>{{data.uploaded_at}}</td> 
+                                            {<td >
+                                                <a href ="{% url 'file_content' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Show content of file "><i class="fa-regular fa-folder-open"></i></a>
+                                            </td> 
+                                             <td>
+                                                <a href ="{% url 'delete_file' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Delete file" ><i class="fa-regular fa-trash-can"  style="color:red" ></i></a>
+                                             </td> 
+                                        {%empty%}
+                                            <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
+                                        </tr>
+                                        {% endfor %}    
+                                </tbody>
+                            </table>
+                </div>
+            </div>
+        </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'top'
+    });
+});
+</script>
+{%endblock%}

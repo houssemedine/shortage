@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+{% block content %}
+<div class="row">  
+  <ul class="pagination justify-content-end">
+    {% if   records.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ records.previous_page_number }}">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            </a>
+          </li>
+    {% endif %}
+    {% if records.number|add:'-5' > 1 %}
+        <li class="page-item" >
+          <a class="page-link" href="?page={{ records.number|add:'-5' }}">&hellip;</a>
+        </li>
+    {% endif %}
+    {% for i in records.paginator.page_range %}
+        {% if records.number == i %}
+            <li class="page-link">
+              <span>{{ i }} 
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+        {% elif i > records.number|add:'-5' and i < records.number|add:'5' %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+        {% endif %}
+    {% endfor %} 
+    {% if records.paginator.num_pages > records.number|add:'5' %}
+        <li>
+          <a class="page-link" href="?page={{ records.number|add:'5' }}">&hellip;</a>
+        </li>
+    {% endif %}
+    {% if records.has_next %}
+        <li>
+          <a class="page-link" href="?page={{ records.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        </li>
+    {% endif %}
+ </ul> 
+            <div class="col-md-12">
+                <div class="card" >
+                    <div class="card-header">
+                         <h3 class="card-title">Overview</h3>
+                         <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                <i class="fas fa-expand"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                              </button>
+                            </div>
+                    </div>
+                    <div class="card-body">
+                      <div style='overflow:auto;width:100%'>
+                          <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
+                                  <thead>
+                                      <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Material</th>
+                                      <th scope="col">Division</th>
+                                      <th scope="col">Purchase group designation</th>
+                                      <th scope="col">Allocated Supplier</th>
+                                      <th scope="col">View all</th>
+                                      </tr>
+                                  </thead>
+                              <tbody >
+                                      {% for data in records %}
+                                      <tr>
+                                          <td>{{data.id}}</td>
+                                          <td>{{data.material}}</td>
+                                          <td>{{data.division}}</td>
+                                          <td>{{data.gac}}</td>
+                                          <td>{{data.vendor}}</td>
+                                          <td>
+                                            <button type="button" class="btn btn-primary-outline" 
+                                            data-id='{{data.id}}'  
+                                            data-material='{{data.material}}'  
+                                            data-division='{{data.division}}'
+                                            
+                                            data-toggle="modal" data-target="#viewall">
+                                              <i class="fa-regular fa-folder-open"></i>
+                                            </button>
+                                          </td>
+                                          {%empty%}
+                                          <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
+                                      {% endfor %}     
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+</div>
+<!-- Details Modal -->
+  <div class="modal fade" id="viewall" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">View all</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- <input type='text' class='inputtest'> -->
+          <div style='overflow:auto;width:100%'>
+            <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
+                    <thead>
+                        <tr>
+                        <!-- <th scope="col">ID</th> -->
+                        <th scope="col">Material</th>
+                        <th scope="col">Division</th>
+                        <th scope="col">MRP Area</th>
+                        <th scope="col">Profit Center</th>
+                        <th scope="col">Purchase group designation</th>
+                        <th scope="col">Scope Allocation</th>
+                        <th scope="col">Allocated Supplier</th>
+                        <th scope="col">Planned delivery time</th>
+                        <th scope="col">Material type</th>
+                        <th scope="col">Material status</th>
+                        <th scope="col">Special Procurement type</th>
+                        <th scope="col">Planification type</th>
+                        <th scope="col">Lot QM</th>
+                        <th scope="col">Stock in transit</th>
+                        <th scope="col">Package number</th>
+                        <th scope="col">Warehouse Stock</th>
+                        <th scope="col">Workshop Stock</th>
+                        <th scope="col">Stock ZPush</th>
+                        <th scope="col">Stock Quality</th>
+                        <th scope="col">Other Stocks</th>
+                        <th scope="col">Stock in supply division</th>
+                        <th scope="col">CORE ID</th>
+                        <th scope="col">CORE Status</th>
+                        <th scope="col">CORE Creation</th>
+                        <th scope="col">CORE Comment</th>
+                        <th scope="col">Ongoing PO</th>
+                        <th scope="col">Confirmed delivery date</th>
+                        <th scope="col">Quantity to receive</th>
+                        <th scope="col">Procurement agent</th>
+                        <th scope="col">PO Supplier</th>
+                        <th scope="col">Date of missing</th>
+                        <th scope="col">Missing status</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col">Action Status</th>
+                        <th scope="col">Needs in the past</th>
+                        <th scope="col">Backlog PO Qty</th>
+                        <th scope="col">Coverage time</th>
+                        <th scope="col">Week</th>
+                        <th scope="col">Week+x</th>
+                        </tr>
+                    </thead>
+                <tbody >
+                    <tr id='datatable'>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script >
+    $('#viewall').on('show.bs.modal', function (event) {
+      var id = $(event.relatedTarget).data('id');
+      var material = $(event.relatedTarget).data('material');
+      // $(this).find(".modal-body  .inputtest").val(material);
+      document.getElementById("datatable").innerHTML="<td>"+material+"</td>";
+      document.getElementById("datatable").innerHTML="<td>"+division+"</td>";
+
+      
+    });
+  
+   $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip({
+              placement : 'top'
+          });
+      });
+  </script>    
+{% endblock content %}

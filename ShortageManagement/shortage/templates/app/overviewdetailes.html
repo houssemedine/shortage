@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">   
+            <div class="col-md-12">
+                <div class="card" >
+                    <div class="card-header">
+                         <h3 class="card-title">Overview</h3>
+                         <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                <i class="fas fa-expand"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                              </button>
+                            </div>
+                    </div>
+                    <div class="card-body">
+                      <div style='overflow:auto;width:100%'>
+                          <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
+                                  <thead>
+                                      <tr>
+                                      <th scope="col">Material</th>
+                                      <th scope="col">Division</th>
+                                      <th scope="col">MRP Area</th>
+                                      <th scope="col">Profit Center</th>
+                                      <th scope="col">Purchase group designation</th>
+                                      <th scope="col">Scope Allocation</th>
+                                      <th scope="col">Allocated Supplier</th>
+                                      <th scope="col">Planned delivery time</th>
+                                      <th scope="col">Material type</th>
+                                      <th scope="col">Material status</th>
+                                      <th scope="col">Special Procurement type</th>
+                                      <th scope="col">Planification type</th>
+                                      <th scope="col">Lot QM</th>
+                                      <th scope="col">Stock in transit</th>
+                                      <th scope="col">Package number</th>
+                                      <th scope="col">Warehouse Stock</th>
+                                      <th scope="col">Workshop Stock</th>
+                                      <th scope="col">Stock ZPush</th>
+                                      <th scope="col">Stock Quality</th>
+                                      <th scope="col">Other Stocks</th>
+                                      <th scope="col">Stock in supply division</th>
+                                      <th scope="col">CORE ID</th>
+                                      <th scope="col">CORE Status</th>
+                                      <th scope="col">CORE Creation</th>
+                                      <th scope="col">CORE Comment</th>
+                                      <th scope="col">Ongoing PO</th>
+                                      <th scope="col">Confirmed delivery date</th>
+                                      <th scope="col">Quantity to receive</th>
+                                      <th scope="col">Procurement agent</th>
+                                      <th scope="col">PO Supplier</th>
+                                      <th scope="col">Date of missing</th>
+                                      <th scope="col">Missing status</th>
+                                      <th scope="col">Action</th>
+                                      <th scope="col">Comment</th>
+                                      <th scope="col">Action Status</th>
+                                      <th scope="col">Needs in the past</th>
+                                      <th scope="col">Backlog PO Qty</th>
+                                      <th scope="col">Coverage time</th>
+                                      <th scope="col">Week</th>
+                                      <th scope="col">Week+x</th>
+                                      </tr>
+                                  </thead>
+                              <tbody >
+                                      {% for data in df_zpp %}
+                                      <tr>
+                                          <td>{{data.material}}</td>
+                                          <td>{{data.division}}</td>
+                                          <td>{{data.mrp_area}}</td>
+                                          <td>{{data.profit_center}}</td>
+                                          <td>{{data.purchase_group_designation}}</td>
+                                          <td>{{data.scope_allocation}}</td>
+                                          <td>{{data.allocated_supplier}}</td>
+                                          <td>{{data.planned_delivery_time}}</td>
+                                          <td>{{data.material_type}}</td>
+                                          <td>{{data.material_status}}</td>
+                                          <td>{{data.special_procurement_type}}</td>
+                                          <td>{{data.planification_type}}</td>
+                                          <td>{{data.lot_qm}}</td>  
+                                          <td>{{data.stock_in_transit}}</td>
+                                          <td>{{data.package_number}}</td>
+                                          <td>{{data.warehouse_stock}}</td>
+                                          <td>{{data.workshop_stock}}</td>
+                                          <td>{{data.stock_zpush}}</td>
+                                          <td>{{data.stock_quality}}</td>
+                                          <td>{{data.other_stocks}}</td>
+                                          <td>{{data.stock_in_supply_division}}</td>
+                                          <td>{{data.core}}</td>
+                                          <td>{{data.core_status}}</td>
+                                          <td>{{data.core_creation}}</td>
+                                          <td>{{data.core_comment}}</td>
+                                          <td>{{data.ongoing_po}}</td>  
+                                          <td>{{data.confirmed_delivery_date}}</td>  
+                                          <td>{{data.quantity_to_receive}}</td>
+                                          <td>{{data.procurement_agent}}</td>
+                                          <td>{{data.po_supplier}}</td>
+                                          <td>{{data.date_of_missing}}</td>
+                                          <td>{{data.missing_status}}</td>
+                                          <td>{{data.action}}</td>
+                                          <td>{{data.comment}}</td>
+                                          <td>{{data.action_status}}</td>
+                                          <td>{{data.needs_in_the_past}}</td>
+                                          <td>{{data.backlog_p_qty}}</td>
+                                          <td>{{data.coverage_time}}</td>
+                                          <td>{{data.week}}</td>
+                                          <td>{{data.week_x}}</td> 
+                                          {%empty%}
+                                          <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
+                                      </tr>
+                                      {% endfor %}     
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock content %}

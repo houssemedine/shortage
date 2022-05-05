@@ -1,0 +1,46 @@
+[
+    {
+      "model": "auth.group",
+      "pk": 1,
+      "fields": {
+        "name": "administrators"
+      }
+    },
+    {
+      "model": "auth.group",
+      "pk": 2,
+      "fields": {
+        "name": "users"
+      }
+    },
+    {
+      "model": "auth.group",
+      "pk": 3,
+      "fields": {
+        "name": "managers"
+      }
+    },
+    {
+      "model": "auth.group",
+      "pk": 4,
+      "fields": {
+        "name": ""
+      }
+    },
+    
+    { 
+      "model": "auth.user",
+      "pk": 1,
+      "fields": {
+        "password":"pbkdf2_sha256$320000$fTKBzfVxLpokvQbGmzpZmc$MDlQI8D7FHnjjGtNem40laNdpitHog1WqJMldV+FJn8=",
+        "is_superuser": "True",
+        "username":"admin",
+        "first_name":"",
+        "last_name":"",
+        "email":"",
+        "is_staff":"True"
+        
+      }
+    }
+
+  ]

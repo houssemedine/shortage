@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content  %}
+<div class="error-page">
+    {% if message == 'not found' %}
+        <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-danger"></i></h2>
+   {% elif  message == 'not allowed to acces'%}
+        <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-warning"></i></h2>
+    {%else %}
+        <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-info"></i></h2>
+    {% endif %}
+    <div class="error-content">
+    <h3> Oops!Something went wrong.</h3>
+    <p>
+        {{username}} {{message}}
+    </p>
+    </div>
+    </div>
+{% endblock  %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+{% load crispy_forms_tags %}
+{% load static %}
+{%block content%}
+<style>
+  .action{
+    border-radius: 50%;
+    font-size: 16px;
+    height: 30px;
+    left: 18px;
+    line-height: 30px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 30px;
+    color:white;
+  }
+</style>
+<div style='margin-bottom:10px'>
+<a href ="{% url 'core' %}" >{% bs_icon 'arrow-left' size='2em'  %}</a>
+</div>
+<section class="content">
+  <div class="container-fluid">
+    {%if     core.status != 'Close' and core.status != 'Refuse' %}
+    <div class="card card-primary shadow" id="card">
+      <div class="card-header">
+          <h3 class="card-title">Action On Core Number : {{core.id}}</h3>
+          <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+              <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+              </button>
+          </div>
+      </div>
+      <div class="card-body">
+        <form method= "POST" class ="form-group-inline" hx-target="#history"
+        hx-swap= "beforeend"
+        hx-post="{% url 'save_core_history' pk%}">
+          <div >
+            {% csrf_token %}
+            <div>
+                <label for="recipient-name" class="col-form-label">Status:</label>
+                <select class="custom-select" id="status" name ="status">
+                    <option value="To do" {%if core.status == 'To do'%}disabled selected {%endif%}>To do</option>
+                    <option  value="Open" {%if core.status == 'Open'%} selected {%endif%}>Open</option>
+                    <option value="Stand by" {%if core.status == 'Stand by'%} selected {%endif%}>Stand by</option>
+                    <option value="Refuse"{%if core.status == 'Refuse'%} selected {%endif%}>Refuse</option>
+                    <option value="Request" {%if core.status == 'Request'%} selected {%endif%}>Request</option>
+                    <option value="Information" {%if core.status == 'Information'%} selected {%endif%}>Information</option>
+                    <option value="Close">Close</option>
+                </select>
+            </div>
+            {{form|crispy}}
+            <div class="d-flex justify-content-center" style='margin-bottom:10px'>
+              {% comment %} <input type="submit" class="btn btn-primary" value="Save" id ="save"> {% endcomment %}
+              <button hx-post-"{% url 'save_core_history' core.id%}" hx-target-"#history" type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+    {%endif%}
+    <div class="card card-light  shadow collapsed-card" id="history">
+      <div class="card-header">
+          <h3 class="card-title">History</h3>
+          <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+              <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-plus"></i>
+              </button>
+          </div>
+      </div>
+      <div class="card-body">
+        <div class="timeline">
+          {%for data in data%}
+            <div class="time-label">
+                <span class="bg-yellow">{{data.created_on|date:"d M.Y H:m"}}</span>
+            </div>
+          <div>
+            {%if data.action == 'Request' %}
+              <i class="fa-solid fa-circle-question bg-navy action color"></i>
+            {% elif data.action == 'Information' %}
+                <i class="fas fa-comments bg-info  action"></i>
+            {% elif data.action == 'Open' %}
+              <i class="fa-solid fa-circle-play  bg-gray action"></i>
+            {% elif data.action == 'Stand by' %}
+                <i class="fa-solid  fa-circle-pause bg-purple action "></i>
+            {% elif data.action == 'Refuse' %}
+                <i class="fa-solid fa-circle-xmark  bg-danger action"></i>
+            {% else %}
+                <i class="fa-solid fa-circle-check  bg-green action"></i>
+            {%endif%}
+              <div class="timeline-item">
+                  {% comment %} <span class="time"><i class="fas fa-clock"></i> </span> {% endcomment %}
+                  <h3 class="timeline-header">{{data.created_by}}</h3>
+                  <div class="timeline-body">{{data.comment}}</div>
+              </div>
+          </div>
+          {%empty%}
+                  <p style='text-align:center'>No Comment yet</p>
+          {%endfor%}
+       </div>
+      </div>
+      </div>
+  </div>
+</section>
+{%endblock%}

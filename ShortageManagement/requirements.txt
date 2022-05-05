@@ -1,0 +1,9 @@
+#Admin LTE for frontend templates
+#
+psycopg2
+openpyxl
+pandas
+django-crispy-forms
+django-bootstrap-icons
+django-htmx
+

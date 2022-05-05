@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+{% block content %}
+<div class="container-fuild">
+  <ul class="pagination justify-content-end">
+                    {% if data.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ data.previous_page_number }}">
+                              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </a>
+                          </li>
+                    {% endif %}
+                    {% if data.number|add:'-5' > 1 %}
+                        <li class="page-item" >
+                          <a class="page-link" href="?page={{ data.number|add:'-5' }}">&hellip;</a>
+                        </li>
+                    {% endif %}
+                    {% for i in data.paginator.page_range %}
+                        {% if data.number == i %}
+                            <li class="page-link">
+                              <span>{{ i }} 
+                                <span class="sr-only">(current)</span>
+                              </span>
+                            </li>
+                        {% elif i > data.number|add:'-5' and i < data.number|add:'5' %}
+                            <li class="page-item">
+                              <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %} 
+                    {% if data.paginator.num_pages > data.number|add:'5' %}
+                        <li>
+                          <a class="page-link" href="?page={{ data.number|add:'5' }}">&hellip;</a>
+                        </li>
+                    {% endif %}
+                    {% if data.has_next %}
+                        <li>
+                          <a class="page-link" href="?page={{ data.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                        </li>
+                    {% endif %}
+                </ul>
+  <div class='row'>
+            <div class='col-12'>
+                    <div class='card card-primary card-outline'  style='overflow:auto;width:100%'>
+                            <div class='card-header'>
+                                    <h5>{{namefile}} </h5>
+                            </div>
+                            <div class='body'>
+                                <table class="table table-hover table-sm table-bordered  table-responsive">
+                                        <thead>
+                                            <tr>
+                                            {% for field in fields %}  
+                                                <th scope="col">{{field}}</th>
+                                              {%endfor%}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for d in data %}
+                                            <tr>
+                                              {%for i in d%}
+                                                {% if i.date%}
+                                                    <td style='white-space:nowrap;'>{{i|date:"d M Y"}}</td>
+                                                {%else %}
+                                                    <td style='white-space:nowrap;'>{{i}}</td>
+                                                {%endif%}
+                                              {%endfor%}
+                                            </tr>
+                                          {% endfor %}
+                                          
+                                        </tbody>
+                                  </table>                                           
+                          </div>
+                    </div>
+          </div>
+  </div>
+    
+</div>
+{%endblock%}
