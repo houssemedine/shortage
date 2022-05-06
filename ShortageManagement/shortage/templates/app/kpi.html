@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+
+
+ul.ks-cboxtags {
+    display: flex;flex-wrap: wrap;justify-content: space-between;
+    list-style: none;
+    padding: 20px; 
+}
+    ul.ks-cboxtags li {
+    display: block; 
+}
+    ul.ks-cboxtags li label {
+        display: inline-block;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: rgba(0, 0, 0, 0.8);
+        font-size: 15px;
+        border-radius: 4px;
+        white-space: nowrap;
+        margin: 0 0 10px 0;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-transition: all .2s;
+        -o-transition: all .2s;
+        transition: all .2s;
+        width: 100px;
+
+    }
+
+ul.ks-cboxtags li label {
+  padding: 10px 20px;
+  cursor: pointer; }
+  ul.ks-cboxtags li label::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "FontAwesome";
+    font-weight: 900;
+    font-size: 15px;
+    padding: 0;
+    margin-right: 15px;
+    content: "\f1db";
+    color: rgba(0, 0, 0, 0.2);
+    -webkit-transition: -webkit-transform .3s ease-in-out;
+    transition: -webkit-transform .3s ease-in-out;
+    -o-transition: transform .3s ease-in-out;
+    transition: transform .3s ease-in-out;
+    transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
+    /* position: absolute;
+    right: 40px; */
+    margin-top: -5px; 
+}
+  ul.ks-cboxtags li label span {
+    background: #f9e090;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 30px;
+    color: #fff;
+    margin-left: 10px; }
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
+  content: "\f058";
+  -webkit-transform: rotate(-360deg);
+  -ms-transform: rotate(-360deg);
+  transform: rotate(-360deg);
+  -webkit-transition: -webkit-transform .3s ease-in-out;
+  transition: -webkit-transform .3s ease-in-out;
+  -o-transition: transform .3s ease-in-out;
+  transition: transform .3s ease-in-out;
+  transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
+  color: #fff; }
+
+ul.ks-cboxtags li input[type="checkbox"]:checked + label {
+  border: 1px solid #c400c6;
+  background-color: #c400c6;
+  color: #fff;
+  -webkit-transition: all .2s;
+  -o-transition: all .2s;
+  transition: all .2s; }
+  ul.ks-cboxtags li input[type="checkbox"]:checked + label span {
+    background: #fff;
+    color: #000; }
+
+ul.ks-cboxtags li input[type="checkbox"] {
+  display: absolute; }
+
+ul.ks-cboxtags li input[type="checkbox"] {
+  position: absolute;
+  opacity: 0; }
+ul.ks-cboxtags li label:hover {
+    background-color: #c400c6;
+    color: #fff;
+    border-color: #fff;
+
+}
+ul.ks-cboxtags li input[type="checkbox"]:hover + label::before{
+    border-color: #fff;
+    color: #fff;
+ }
+.card-filter{
+    box-shadow: 0px 8px 60px -10px rgba(13, 28, 39, 0.6); 
+    border-radius: 10px;
+    height: 400px;
+}
+.card-filter-header{
+    /* color: #fff;
+    margin-top: 0px;
+    text-align: center;
+    font-weight: 100;
+    font-size: 25px;
+    background: var(--primary);
+    -webkit-box-shadow: 0 0 3px rgb(0 0 0 / 70%);
+    box-shadow: 0 0 3px rgb(0 0 0 / 80%);
+    height: 43px;
+    border-radius: 10px 10px 0 0; */
+    text-align: center;
+    
+
+    
+}
+.card-filter-header .m-0{
+    font-weight: 700 !important;
+    font-size: 18px;
+
+}
+.profile-card__button {
+	 background: none;
+	 border: none;
+	 /* font-family: 'Quicksand', sans-serif; */
+	 font-weight: 500;
+	 font-size: 18px;
+	 margin: 15px 35px;
+	 /* padding: 15px 40px; */
+	 min-width: 160px;
+	 border-radius: 50px;
+	 min-height: 45px;
+	 color: #fff;
+	 cursor: pointer;
+	 backface-visibility: hidden;
+	 transition: all 0.3s;
+}
+ @media screen and (max-width: 768px) {
+	 .profile-card__button {
+		 min-width: 170px;
+		 margin: 15px 25px;
+	}
+}
+ @media screen and (max-width: 576px) {
+	 .profile-card__button {
+		 min-width: inherit;
+		 margin: 0;
+		 margin-bottom: 16px;
+		 width: 100%;
+		 max-width: 300px;
+	}
+	 .profile-card__button:last-child {
+		 margin-bottom: 0;
+	}
+}
+ .profile-card__button:focus {
+	 outline: none !important;
+}
+ @media screen and (min-width: 768px) {
+	 .profile-card__button:hover {
+		 transform: translateY(-5px);
+	}
+}
+ .profile-card__button:first-child {
+	 margin-left: 0;
+}
+ .profile-card__button:last-child {
+	 margin-right: 0;
+}
+ .profile-card__button.button--blue {
+	 background: linear-gradient(45deg, #1da1f2, #0e71c8);
+	 box-shadow: 0px 4px 30px rgba(19, 127, 212, 0.4);
+}
+ .profile-card__button.button--blue:hover {
+	 box-shadow: 0px 7px 30px rgba(19, 127, 212, 0.75);
+}
+</style>
+<div class="row">
+    <div class="col-2">
+        <div class="card card-filter">
+            <div class="card-header card-filter-header">
+                <h5 class="m-0">Division</h5>
+            </div>
+            <ul class="ks-cboxtags">
+                {% for site,division in divisions.items%}
+                    <li>
+                        <input type="checkbox" id="{{division}}" value="Order one">
+                        <label for="{{division}}">{{division}} </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card card-filter">
+            <div class="card-header card-filter-header">
+                <h5 class="m-0">Scope Allocation</h5>
+            </div>
+            <ul class="ks-cboxtags">
+                <li>
+                    <input type="checkbox" id="serial" value="Order one">
+                    <label for="serial" style="width: 200px;">SERIAL</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="no_aircraft" value="Order one">
+                    <label for="no_aircraft" style="width: 200px;">NO AIRCRAFT</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="space" value="Order one">
+                    <label for="space" style="width: 200px;">SPACE</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card card-filter">
+            <div class="card-header card-filter-header">
+                <h5 class="m-0">Profit Center</h5>
+            </div>
+            <ul class="ks-cboxtags">
+                <li>
+                    <input type="checkbox" id="profit1" value="Order one">
+                    <label for="profit1" style="width: 200px;">Profit 1</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="profit2" value="Order one">
+                    <label for="profit2" style="width: 200px;">Profit 2</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="profit3" value="Order one">
+                    <label for="profit3" style="width: 200px;">Profit 3</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card card-filter">
+            <div class="card-header card-filter-header">
+                <h5 class="m-0">Purchasing group</h5>
+            </div>
+            <ul class="ks-cboxtags">
+                <li>
+                    <input type="checkbox" id="Purchasing1" value="Order one">
+                    <label for="Purchasing1" style="width: 200px;">Purchasing 1</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="Purchasing2" value="Order one">
+                    <label for="Purchasing2" style="width: 200px;">Purchasing 2</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="Purchasing3" value="Order one">
+                    <label for="Purchasing3" style="width: 200px;">Purchasing 3</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card card-filter">
+            <div class="card-header card-filter-header">
+                <h5 class="m-0">Week</h5>
+            </div>
+            <ul class="ks-cboxtags">
+                <li>
+                    <input type="checkbox" id="week1" value="Order one">
+                    <label for="week1" style="width: 200px;">week 1</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="week2" value="Order one">
+                    <label for="week2" style="width: 200px;">week 2</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="week3" value="Order one">
+                    <label for="week3" style="width: 200px;">week 3</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<center><button class="profile-card__button button--blue">Apply</button></center>
+<!-- <button class="profile-card__button button--orange">Follow</button> -->
+
+{% endblock content %}

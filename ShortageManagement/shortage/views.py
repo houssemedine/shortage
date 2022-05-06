@@ -1,4 +1,5 @@
 # Create your views here.
+from __future__ import division
 from cgitb import html
 from io import StringIO
 from django.shortcuts import render
@@ -954,7 +955,9 @@ def overview(request):
 
     return render(request,'app/overview.html',{'records':records})
 def kpi(request):
-    return True
+    divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
+    return render(request,'app/kpi.html',{'divisions':divisions})
+
 
 
 
