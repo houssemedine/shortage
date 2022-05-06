@@ -40,26 +40,26 @@ def upload(request):
 def uploaded_files(request):
     #connection to DB 
         try:
-            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='054Ibiza',port='5432') 
-            file_mb52=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MB52 ALL.xlsx')
-            file_se16ncepc=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\cepc.xlsx')
-            file_se16nt001l=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T001l.xlsx')
-            file_se16nt024=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T024.xlsx')
-            file_zmm=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
-            file_st=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\stock_transit.xlsx')
-            file_art=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
-            file_md=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MDMA.xlsx')
+            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='sahar',port='5432') 
+            file_mb52=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MB52 ALL.xlsx')
+            file_se16ncepc=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\cepc.xlsx')
+            file_se16nt001l=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T001l.xlsx')
+            file_se16nt024=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T024.xlsx')
+            file_zmm=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
+            file_st=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\stock_transit.xlsx')
+            file_art=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
+            file_md=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MDMA.xlsx')
             zpp_md_stock={
-                "2500":r"C:\Users\L0005082\Documents\Input SAP\BEL MD STOCK.xlsx",
-                "2600":r"C:\Users\L0005082\Documents\Input SAP\CAN MD STOCK.xlsx",
-                "2400":r"C:\Users\L0005082\Documents\Input SAP\CAS MD STOCK.xlsx",
-                "2010":r"C:\Users\L0005082\Documents\Input SAP\COL MD STOCK.xlsx",
-                "2110":r"C:\Users\L0005082\Documents\Input SAP\FOU MD STOCK.xlsx",
-                "2200":r"C:\Users\L0005082\Documents\Input SAP\HBG MD STOCK.xlsx",
-                "2000":r"C:\Users\L0005082\Documents\Input SAP\LAB MD STOCK.xlsx",
-                "2030":r"C:\Users\L0005082\Documents\Input SAP\LEC MD STOCK.xlsx",
-                "2020":r"C:\Users\L0005082\Documents\Input SAP\LIP MD STOCK.xlsx",
-                "2300":r"C:\Users\L0005082\Documents\Input SAP\MEX MD STOCK.xlsx"
+                "2500":r"C:\Users\bibas\Downloads\Input SAP\BEL MD STOCK.xlsx",
+                "2600":r"C:\Users\bibas\Downloads\Input SAP\CAN MD STOCK.xlsx",
+                "2400":r"C:\Users\bibas\Downloads\Input SAP\CAS MD STOCK.xlsx",
+                "2010":r"C:\Users\bibas\Downloads\Input SAP\COL MD STOCK.xlsx",
+                "2110":r"C:\Users\bibas\Downloads\Input SAP\FOU MD STOCK.xlsx",
+                "2200":r"C:\Users\bibas\Downloads\Input SAP\HBG MD STOCK.xlsx",
+                "2000":r"C:\Users\bibas\Downloads\Input SAP\LAB MD STOCK.xlsx",
+                "2030":r"C:\Users\bibas\Downloads\Input SAP\LEC MD STOCK.xlsx",
+                "2020":r"C:\Users\bibas\Downloads\Input SAP\LIP MD STOCK.xlsx",
+                "2300":r"C:\Users\bibas\Downloads\Input SAP\MEX MD STOCK.xlsx"
             } 
 
             #User name
@@ -953,7 +953,8 @@ def overview(request):
 
 
     return render(request,'app/overview.html',{'records':records})
-
+def kpi(request):
+    return True
 
 
 

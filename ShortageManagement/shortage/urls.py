@@ -15,5 +15,8 @@ urlpatterns = [
     #Result 
     path ('overview',views.overview,name='overview'), #table of result 
     # path('viewall/<int:pk>',views.viewall,name='viewall')
+    path ('kpi',views.kpi,name='shortage_kpi'), #table of result 
+
+
 
 ]

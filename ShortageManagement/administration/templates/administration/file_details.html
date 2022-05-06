@@ -14,8 +14,8 @@
                                         <tr>
                                         <th scope="col">Year</th>
                                         <th scope="col">Week</th>
-                                        <th scope="col">Uploded by</th>
-                                        <th scope="col">Uploded at</th>
+                                        <th scope="col">Uploaded by</th>
+                                        <th scope="col">Uploaded at</th>
                                         <th scope="col" colspan="2">Action</th>
                                         </tr>
                                     </thead>
@@ -26,7 +26,7 @@
                                             <td>{{data.week}}</td>
                                             <td>{{data.uploaded_by}}</td>
                                             <td>{{data.uploaded_at}}</td> 
-                                            {<td >
+                                            <td >
                                                 <a href ="{% url 'file_content' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Show content of file "><i class="fa-regular fa-folder-open"></i></a>
                                             </td> 
                                              <td>

@@ -75,7 +75,7 @@
                                           <td>{{data.vendor}}</td>
                                           <td>
                                             <button type="button" class="btn btn-primary-outline" 
-                                            data-id='{{data.id}}'  
+                                            {% comment %} data-id='{{data.id}}'   {% endcomment %}
                                             data-material='{{data.material}}'  
                                             data-division='{{data.division}}'
                                             
@@ -169,9 +169,11 @@
     $('#viewall').on('show.bs.modal', function (event) {
       var id = $(event.relatedTarget).data('id');
       var material = $(event.relatedTarget).data('material');
+      var division = $(event.relatedTarget).data('division');
+
       // $(this).find(".modal-body  .inputtest").val(material);
-      document.getElementById("datatable").innerHTML="<td>"+material+"</td>";
-      document.getElementById("datatable").innerHTML="<td>"+division+"</td>";
+      document.getElementById("datatable").innerHTML="<td>"+material+"</td><td>"+division+"</td>";
+
 
       
     });

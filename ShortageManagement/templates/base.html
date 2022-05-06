@@ -230,6 +230,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
             </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url  'overview' %}" class="nav-link active">
+                <p>Overview</p>
+                </a>
+            </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url  'shortage_kpi' %}" class="nav-link active">
+                <p>KPIs</p>
+                </a>
+            </li>
+            </ul>
             </li>
             {% comment %} end Core menu {% endcomment %}
             {% comment %} Administration Menu {% endcomment %}
@@ -249,6 +263,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
             </li>
             </ul>
+
             </li>
 
             {% comment %} end Administration menu {% endcomment %}
