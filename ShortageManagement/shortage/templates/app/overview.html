@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load bootstrap_icons %}
 {% block content %}
-<div class="row">  
-  <ul class="pagination justify-content-end">
+<div class="row"> 
+  <ul class="pagination justify-content-end pull-right">
     {% if   records.has_previous %}
         <li class="page-item">
             <a class="page-link" href="?page={{ records.previous_page_number }}">
@@ -38,6 +38,7 @@
           <a class="page-link" href="?page={{ records.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
         </li>
     {% endif %}
+
  </ul> 
             <div class="col-md-12">
                 <div class="card" >
@@ -60,8 +61,14 @@
                                       <th scope="col">ID</th>
                                       <th scope="col">Material</th>
                                       <th scope="col">Division</th>
+                                      <th scope="col">Mrp Area</th>
+                                      <th scope="col">Profit Center</th>
                                       <th scope="col">Purchase group designation</th>
+                                      <th scope="col">Scope Allocation</th>
                                       <th scope="col">Allocated Supplier</th>
+                                      <th scope="col">Core Id</th>
+                                      <th scope="col">Missig Status</th>
+                                      <th scope="col">Action</th>
                                       <th scope="col">View all</th>
                                       </tr>
                                   </thead>
@@ -71,14 +78,29 @@
                                           <td>{{data.id}}</td>
                                           <td>{{data.material}}</td>
                                           <td>{{data.division}}</td>
+                                          <td>{{data.mrp_area}}</td>
+                                          <td>{{data.profit_center}}</td>
                                           <td>{{data.gac}}</td>
+                                          <td>{{data.scope_allocation}}</td>
                                           <td>{{data.vendor}}</td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>                                          
                                           <td>
                                             <button type="button" class="btn btn-primary-outline" 
                                             {% comment %} data-id='{{data.id}}'   {% endcomment %}
-                                            data-material='{{data.material}}'  
-                                            data-division='{{data.division}}'
-                                            
+                                            data-dpr='{{data.dpr}}'  
+                                            data-tyar='{{data.tyar}}'
+                                            data-mp='{{data.mp}}'
+                                            data-a_s='{{data.a_s}}'
+                                            data-typ='{{data.typ}}'
+                                            data-mrp_element='{{data.mrp_element}}'
+                                            data-delivery_qty='{{data.delivery_qty}}'
+                                            data-num_parcel='{{data.num_parcel}}'
+                                            {% comment %} data-validated_delivery_date='{{data.validated_delivery_date}}'
+                                             {% endcomment %}
+                                            {% comment %} data-confirmed_quantity='{{data.confirmed_quantity}}' {% endcomment %}
+                                            {% comment %} data-vendor_name='{{data.vendor_name}}' {% endcomment %}
                                             data-toggle="modal" data-target="#viewall">
                                               <i class="fa-regular fa-folder-open"></i>
                                             </button>
@@ -95,7 +117,7 @@
 </div>
 <!-- Details Modal -->
   <div class="modal fade" id="viewall" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">View all</h5>
@@ -109,14 +131,6 @@
             <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
                     <thead>
                         <tr>
-                        <!-- <th scope="col">ID</th> -->
-                        <th scope="col">Material</th>
-                        <th scope="col">Division</th>
-                        <th scope="col">MRP Area</th>
-                        <th scope="col">Profit Center</th>
-                        <th scope="col">Purchase group designation</th>
-                        <th scope="col">Scope Allocation</th>
-                        <th scope="col">Allocated Supplier</th>
                         <th scope="col">Planned delivery time</th>
                         <th scope="col">Material type</th>
                         <th scope="col">Material status</th>
@@ -125,7 +139,7 @@
                         <th scope="col">Lot QM</th>
                         <th scope="col">Stock in transit</th>
                         <th scope="col">Package number</th>
-                        <th scope="col">Warehouse Stock</th>
+                        {% comment %} <th scope="col">Warehouse Stock</th>
                         <th scope="col">Workshop Stock</th>
                         <th scope="col">Stock ZPush</th>
                         <th scope="col">Stock Quality</th>
@@ -135,12 +149,12 @@
                         <th scope="col">CORE Status</th>
                         <th scope="col">CORE Creation</th>
                         <th scope="col">CORE Comment</th>
-                        <th scope="col">Ongoing PO</th>
-                        <th scope="col">Confirmed delivery date</th>
-                        <th scope="col">Quantity to receive</th>
-                        <th scope="col">Procurement agent</th>
-                        <th scope="col">PO Supplier</th>
-                        <th scope="col">Date of missing</th>
+                        <th scope="col">Ongoing PO</th> {% endcomment %}
+                        {% comment %} <th scope="col">Confirmed delivery date</th> {% endcomment %}
+                        {% comment %} <th scope="col">Quantity to receive</th> {% endcomment %}
+                        {% comment %} <th scope="col">Procurement agent</th> {% endcomment %}
+                        {% comment %} <th scope="col">PO Supplier</th> {% endcomment %}
+                        {% comment %} <th scope="col">Date of missing</th>
                         <th scope="col">Missing status</th>
                         <th scope="col">Action</th>
                         <th scope="col">Comment</th>
@@ -149,7 +163,7 @@
                         <th scope="col">Backlog PO Qty</th>
                         <th scope="col">Coverage time</th>
                         <th scope="col">Week</th>
-                        <th scope="col">Week+x</th>
+                        <th scope="col">Week+x</th> {% endcomment %}
                         </tr>
                     </thead>
                 <tbody >
@@ -164,15 +178,23 @@
         </div>
       </div>
     </div>
-  </div>
+
+</div>
   <script >
     $('#viewall').on('show.bs.modal', function (event) {
-      var id = $(event.relatedTarget).data('id');
-      var material = $(event.relatedTarget).data('material');
-      var division = $(event.relatedTarget).data('division');
-
+      var dpr = $(event.relatedTarget).data('dpr');
+      var tyar = $(event.relatedTarget).data('tyar');
+      var mp = $(event.relatedTarget).data('mp');
+      var a_s = $(event.relatedTarget).data('a_s');
+      var typ = $(event.relatedTarget).data('typ');
+      var mrp_element = $(event.relatedTarget).data('mrp_element');
+      var delivery_qty = $(event.relatedTarget).data('delivery_qty');
+      var num_parcel  = $(event.relatedTarget).data('num_parcel');
+      {% comment %} var validated_delivery_date  = $(event.relatedTarget).data('validated_delivery_date'); {% endcomment %}
+      {% comment %} var confirmed_quantity  = $(event.relatedTarget).data('confirmed_quantity '); {% endcomment %}
+      {% comment %} var vendor_name  = $(event.relatedTarget).data('vendor_name '); {% endcomment %}
       // $(this).find(".modal-body  .inputtest").val(material);
-      document.getElementById("datatable").innerHTML="<td>"+material+"</td><td>"+division+"</td>";
+      document.getElementById("datatable").innerHTML="<td>"+dpr+"</td><td>"+tyar+"</td><td>"+mp+"</td><td>"+a_s+"</td><td>"+typ+"</td><td>"+mrp_element+"</td><td>"+delivery_qty+"</td><td>"+num_parcel+"</td>";
 
 
       
@@ -183,6 +205,5 @@
               placement : 'top'
           });
       });
-      
   </script>    
 {% endblock content %}
