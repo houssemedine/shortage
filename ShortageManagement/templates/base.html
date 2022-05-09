@@ -32,6 +32,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{% static 'js/adminlte.js'%}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js'%}"></script>
 <script src="{% static 'htmx/htmx.min.js' %}" defer></script>
+  <!-- Charjs must--> <!-- be in head -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <!-- Registration data label  -->
+  <script>
+    Chart.register(ChartDataLabels);
+  </script>
+
 </head>
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
