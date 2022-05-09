@@ -1,0 +1,100 @@
+<div class="col-3">
+    <div class="card card-filter">
+        <div class="card-header card-filter-header">
+            <h5 class="m-0">Division</h5>
+        </div>
+        <ul class="ks-cboxtags">
+            {% for site,division in divisions.items%}
+                <li>
+                    <input type="checkbox" id="{{division}}" value="Order one">
+                    <label for="{{division}}">{{division}} </label>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="col-2">
+    <div class="card card-filter">
+        <div class="card-header card-filter-header">
+            <h5 class="m-0">Scope Allocation</h5>
+        </div>
+        <ul class="ks-cboxtags">
+            <li>
+                <input type="checkbox" id="serial" value="Order one">
+                <label for="serial" style="width: 100%;">SERIAL</label>
+            </li>
+            <li>
+                <input type="checkbox" id="no_aircraft" value="Order one">
+                <label for="no_aircraft" style="width: 100%;">NO AIRCRAFT</label>
+            </li>
+            <li>
+                <input type="checkbox" id="space" value="Order one">
+                <label for="space" style="width: 100%;">SPACE</label>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="col-2">
+    <div class="card card-filter">
+        <div class="card-header card-filter-header">
+            <h5 class="m-0">Profit Center</h5>
+        </div>
+        <ul class="ks-cboxtags">
+            <li>
+                <input type="checkbox" id="profit1" value="Order one">
+                <label for="profit1" style="width: 100%;">Profit 1</label>
+            </li>
+            <li>
+                <input type="checkbox" id="profit2" value="Order one">
+                <label for="profit2" style="width: 100%;">Profit 2</label>
+            </li>
+            <li>
+                <input type="checkbox" id="profit3" value="Order one">
+                <label for="profit3" style="width: 100%;">Profit 3</label>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+<div class="col-2">
+    <div class="card card-filter">
+        <div class="card-header card-filter-header">
+            <h5 class="m-0">Purchasing group</h5>
+        </div>
+        <ul class="ks-cboxtags">
+            <li>
+                <input type="checkbox" id="Purchasing1" value="Order one">
+                <label for="Purchasing1" style="width: 100%;">Purchasing 1</label>
+            </li>
+            <li>
+                <input type="checkbox" id="Purchasing2" value="Order one">
+                <label for="Purchasing2" style="width: 100%;">Purchasing 2</label>
+            </li>
+            <li>
+                <input type="checkbox" id="Purchasing3" value="Order one">
+                <label for="Purchasing3" style="width: 100%;">Purchasing 3</label>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="col-2">
+    <div class="card card-filter">
+        <div class="card-header card-filter-header">
+            <h5 class="m-0">Week</h5>
+        </div>
+        <ul class="ks-cboxtags">
+            <li>
+                <input type="checkbox" id="week1" value="Order one">
+                <label for="week1" style="width: 100%;">week 1</label>
+            </li>
+            <li>
+                <input type="checkbox" id="week2" value="Order one">
+                <label for="week2" style="width: 100%;">week 2</label>
+            </li>
+            <li>
+                <input type="checkbox" id="week3" value="Order one">
+                <label for="week3" style="width: 100%;">week 3</label>
+            </li>
+        </ul>
+    </div>
+</div>

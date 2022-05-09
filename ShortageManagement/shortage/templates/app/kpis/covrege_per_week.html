@@ -1,0 +1,77 @@
+<div class="card card-primary card-outline" style="overflow-x:scroll;overflow-y:scroll;height: 600px !important; ">
+    <div class="card-header">
+        <div class="card-tools" style="margin-right: -0.8rem;" >
+            <li class="list-group-item" style="padding:7px;"><button type="button" class="btn btn-tool" data-card-widget="maximize" style="padding:3px;padding-top: 0px;"><i class="fas fa-expand"></button></i></li>
+        </div>
+        <h5 class="m-0">SAP Coverage weekly evolution</h5>
+    </div>
+    <div class="card-body">
+        <canvas id="covred_per_week" ></canvas>
+
+        <script>
+            var xValues = ['2022_8','2022_9','2022_10','2022_11'];
+            var data = [0.6,0.4,0.2,0.3];
+            
+            const covred_per_week=new Chart("covred_per_week", {
+                type: "bar",
+                data: {
+                        labels: xValues,
+                        datasets: [
+                            {
+                            label:'Coverage',
+                            backgroundColor:  ['#845EC2','#D65DB1','#FF6F91','#FF9671','#FFC75F','#008F7A','#4E8397','#C34A36'],
+                            borderColor:  ['#845EC2','#D65DB1','#FF6F91','#FF9671','#FFC75F','#008F7A','#4E8397','#C34A36'],
+                            borderWidth: 1,
+                            data:  data
+                            },
+                            
+                        ]
+                        },
+                options: {
+                    plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                clamp: true,
+                                color: 'black',
+                                // Format to % 
+                                formatter: (value, ctx) => {
+                                let percentage = (value*100).toFixed(2)+"%";
+                                return percentage;
+                            },
+                            },
+                            legend: {
+                            display: false,
+                            position:'right',
+                            align:'middle',
+                            labels: {
+                            usePointStyle: true,
+                            boxWidth: 6
+                            },
+                            },
+
+                            title: {
+                                display: false,
+                                text: "tile"
+                            },
+                            
+                        },
+                        scales: {
+                            y: {
+                                max:1,
+                                
+                                ticks: {
+                                    format: {
+                                        style: 'percent',
+                                    },
+                                    beginAtZero: true,
+                                    max:100
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio:false, 
+                }
+            });
+        </script>
+    </div>
+</div>

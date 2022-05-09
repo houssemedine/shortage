@@ -223,9 +223,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Sidebar Menu -->
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            {% comment %} Core Menu {% endcomment %}
-            <li class="nav-item menu-open">
-              <a href="#" class="nav-link active">
+            <li class="nav-item
+            {% if '/shortage/' in request.get_full_path  %} menu-open 
+            {% endif %}">
+              <a href="#" class="nav-link"
               
               <p>
                 Shortage
@@ -234,7 +235,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'core' %}" class="nav-link active">
+                <a href="{% url 'core' %}" class="nav-link                 
+                {% if request.get_full_path == '/shortage/core' %} active 
+                {% endif %}">
                 
                 <p>Core</p>
                 </a>
@@ -242,22 +245,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url  'overview' %}" class="nav-link active">
+                <a href="{% url  'overview' %}" class="nav-link  
+                {% if request.get_full_path == '/shortage/overview' %} active 
+                {% endif %}">
                 <p>Overview</p>
                 </a>
             </li>
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url  'shortage_kpi' %}" class="nav-link active">
+                <a href="{% url  'shortage_kpi' %}" class="nav-link 
+                {% if request.get_full_path == '/shortage/kpi' %} active 
+                {% endif %}">
                 <p>KPIs</p>
                 </a>
             </li>
             </ul>
             </li>
-            {% comment %} end Core menu {% endcomment %}
-            {% comment %} Administration Menu {% endcomment %}
-            <li class="nav-item ">
+            <li class="nav-item 
+            {% if '/administration/' in request.get_full_path  %} menu-open
+            {% endif %}">
               <a href="#" class="nav-link">
               
               <p>
@@ -267,16 +274,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url  'files_list' %}" class="nav-link active">
-                
+                <a href="{% url  'files_list' %}" class="nav-link                 
+                {% if request.get_full_path == '/administration/files_list' %} active 
+                {% endif %}">
                 <p>Files list</p>
                 </a>
             </li>
             </ul>
 
             </li>
-
-            {% comment %} end Administration menu {% endcomment %}
            </ul>
 
           
@@ -300,6 +306,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
+        <hr>
       </div>
       <!-- /.content-header --> 
       <!-- Main content -->
