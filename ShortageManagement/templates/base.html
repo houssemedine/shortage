@@ -32,13 +32,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{% static 'js/adminlte.js'%}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js'%}"></script>
 <script src="{% static 'htmx/htmx.min.js' %}" defer></script>
-  <!-- Charjs must--> <!-- be in head -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-  <!-- Registration data label  -->
-  <script>
-    Chart.register(ChartDataLabels);
-  </script>
+
+<!-- Charjs must--> <!-- be in head -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<!-- Registration data label  -->
+<script>
+  Chart.register(ChartDataLabels);
+</script>
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -290,12 +291,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Starter Page</h1>
+              <h1 class="m-0">Shortage management</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">{{request.get_full_path}}</a></li>
-                {% comment %} <li class="breadcrumb-item active">Starter Page</li> {% endcomment %}
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->

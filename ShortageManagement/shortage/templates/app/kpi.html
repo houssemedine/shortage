@@ -103,8 +103,6 @@
 </div>
 <center><button class="profile-card__button button--blue">Apply</button></center>
 
-test
-
 <div class="row">
     <div class="col-6">
         <div class="card card-primary card-outline" style="overflow-x:scroll;overflow-y:scroll;height: 600px !important; ">
@@ -127,11 +125,11 @@ test
                                 labels: xValues,
                                 datasets: [
                                     {
-                                    label:'cost',
+                                    label:'Coverage',
                                     backgroundColor:  ['#845EC2','#D65DB1','#FF6F91','#FF9671','#FFC75F','#008F7A','#4E8397','#C34A36'],
                                     borderColor:  ['#845EC2','#D65DB1','#FF6F91','#FF9671','#FFC75F','#008F7A','#4E8397','#C34A36'],
                                     borderWidth: 1,
-                                    data: data
+                                    data:  data
                                     }
                                 ]
                                 },
@@ -166,14 +164,13 @@ test
                                 scales: {
                                     y: {
                                         max:1,
+                                        
                                         ticks: {
                                             format: {
                                                 style: 'percent',
                                             },
                                             beginAtZero: true,
-                                            steps: 10,
-                                            stepValue: 5,
-                                            max:200
+                                            max:100
                                         }
                                     }
                                 },
