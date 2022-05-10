@@ -1,34 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
 <div class='content'>
-  <div class="container-fuild">
-        <div class='row'>
-                  <div class='col-3'>
+        <div class="container-fuild">
+                <center>
                         <div style='margin-bottom:10px' >
-                                <a href="{% url 'upload' %}"  style='width:100px;text-align:center'data-toggle="tooltip" data-original-title="Create New Core"><button class="profile-card__button button--blue"data-toggle="tooltip" data-original-title="">Import Files</button></a>
+                        <a href="{% url 'upload' %}"  style='width:100px;text-align:center'data-toggle="tooltip" data-original-title="Create New Core"><button class="profile-card__button button--blue"data-toggle="tooltip" data-original-title="">Import Files</button></a>
                         </div>
-                  </div>
-                  <div class='col-6'>
-                          <div class=' card card-primary card-outline card-shadow'>
-                                  <div class='card-header'>
-                                          <h5>List of files </h5>
-                                  </div>
+                </center>
+                <div class='row'>
+                        <div class='col-6 offset-3'>
+                                <div class=' card card-primary card-outline card-shadow'>
+                                        <div class='card-header'>
+                                        <h5>List of files </h5>
+                                        </div>
                                 <div class='body'>
                                         <div class="list-group" id="list-tab" role="tablist">
                                                 {% for model in models_name%}
                                                         {% if model != 'core' and model != 'corehistory' and model != 'result' %}
                                                         <a class="list-group-item list-group-item-action  "   data-bs-toggle="list"  href="{% url 'file_details' model%}" role="tab">{{model}}</a>
                                                         {% endif %}
-                                                 {%endfor%}       
+                                                        {%endfor%}       
                                         </div> 
                                         
-                                         
+                                                
                                 </div>
-                          </div>
-                  </div>
-                <div class='col-3'>
-                </div>
-        </div>  
-  </div>
+                                </div>
+                        </div>
+                </div>  
+        </div>
 </div>
 {% endblock content %}

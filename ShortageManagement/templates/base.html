@@ -226,11 +226,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <li class="nav-item
             {% if '/shortage/' in request.get_full_path  %} menu-open 
             {% endif %}">
-              <a href="#" class="nav-link"
-              
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-home"></i>
               <p>
                 Shortage
-             <i class="right fas fa-angle-left"></i>
+              <i class="right fas fa-angle-left"></i>
               </p>
               </a>
             <ul class="nav nav-treeview">
@@ -238,7 +238,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="{% url 'core' %}" class="nav-link                 
                 {% if request.get_full_path == '/shortage/core' %} active 
                 {% endif %}">
-                
+                <i class="far fa-circle nav-icon"></i>
                 <p>Core</p>
                 </a>
               </li>
@@ -248,6 +248,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="{% url  'overview' %}" class="nav-link  
                 {% if request.get_full_path == '/shortage/overview' %} active 
                 {% endif %}">
+                <i class="far fa-circle nav-icon"></i>
                 <p>Overview</p>
                 </a>
             </li>
@@ -257,6 +258,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="{% url  'shortage_kpi' %}" class="nav-link 
                 {% if request.get_full_path == '/shortage/kpi' %} active 
                 {% endif %}">
+                <i class="far fa-circle nav-icon"></i>
                 <p>KPIs</p>
                 </a>
             </li>
@@ -266,7 +268,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             {% if '/administration/' in request.get_full_path  %} menu-open
             {% endif %}">
               <a href="#" class="nav-link">
-              
+                <i class="nav-icon fa-solid fa-gears"></i>
               <p>
                 Configuration
             <i class="right fas fa-angle-left"></i>
@@ -277,6 +279,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="{% url  'files_list' %}" class="nav-link                 
                 {% if request.get_full_path == '/administration/files_list' %} active 
                 {% endif %}">
+                <i class="far fa-circle nav-icon"></i>
                 <p>Files list</p>
                 </a>
             </li>
@@ -285,6 +288,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </li>
            </ul>
 
+           <img src="{% static 'img/Latecoere-logo.png' %}" alt="User Avatar" style="margin-top: 80%;width: 100%;">
           
         </nav>
       <!-- /.sidebar -->

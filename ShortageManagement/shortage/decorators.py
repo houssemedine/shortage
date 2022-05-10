@@ -16,12 +16,12 @@ def allowed_users(allowed_roles=[]):
                             return view_func (request, *args, **kwargs)
                     else:
                             message='not allowed to acces !'
-                            return render(request,'app/error.html',{'username':username,'message':message})
+                            return render(request,'shortage/error.html',{'username':username,'message':message})
                 else:
                     message='is not active'
-                    return render(request,'app/error.html',{'username':username,'message':message})
+                    return render(request,'shortage/error.html',{'username':username,'message':message})
             else:  
                 message='not found'
-                return render(request,'app/error.html',{'username':username,'message':message})
+                return render(request,'shortage/error.html',{'username':username,'message':message})
         return wrapper_func
     return decorator

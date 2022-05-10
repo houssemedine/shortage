@@ -765,7 +765,7 @@ def save_core_history(request,pk):
         instance.core_id=pk
         instance.action=request.POST['status']
         instance.save()
-    return redirect('core_history')
+    return redirect('core')
 
 #overview
 def overview(request):
