@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-    {%include 'app/filters.html'%}
+    {%include 'shortage/filters.html'%}
 </div>
 <center><button class="profile-card__button button--blue">Apply</button></center>
 <hr>
 <div class="row">
     <div class="col-6">
-        {%include 'app/kpis/covrege_per_week.html'%}
+        {%include 'shortage/kpis/covrege_per_week.html'%}
     </div>
     <div class="col-6">
-        {%include 'app/kpis/material_coverge_per_week.html'%}
+        {%include 'shortage/kpis/material_coverge_per_week.html'%}
     </div>
     
     

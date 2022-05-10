@@ -23,7 +23,7 @@
 <section class="content">
   <div class="container-fluid">
     {%if     core.status != 'Close' and core.status != 'Refuse' %}
-    <div class="card card-primary shadow" id="card">
+    <div class="card card-primary card-shadow" id="card">
       <div class="card-header">
           <h3 class="card-title">Action On Core Number : {{core.id}}</h3>
           <div class="card-tools">
@@ -55,15 +55,15 @@
             </div>
             {{form|crispy}}
             <div class="d-flex justify-content-center" style='margin-bottom:10px'>
-              {% comment %} <input type="submit" class="btn btn-primary" value="Save" id ="save"> {% endcomment %}
-              <button hx-post-"{% url 'save_core_history' core.id%}" hx-target-"#history" type="submit" class="btn btn-primary">Save</button>
+              <input type="submit" class="btn btn-primary" value="Save" id ="save">
+             {% comment %} <button hx-post-"{% url 'save_core_history' core.id%}" hx-target-"#history" type="submit" class="btn btn-primary">Save</button> {% endcomment %}
             </div>
         </div>
         </form>
       </div>
     </div>
     {%endif%}
-    <div class="card card-light  shadow collapsed-card" id="history">
+    <div class="card card-light  card-shadow collapsed-card" >
       <div class="card-header">
           <h3 class="card-title">History</h3>
           <div class="card-tools">

@@ -53,10 +53,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" class="nav-link">Home</a>
+          <a href="{% url  'overview' %}" class="nav-link">Overview</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
+          <a href="{% url  'shortage_kpi' %}" class="nav-link">KPIs</a>
         </li>
       </ul>
   
@@ -188,7 +188,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.navbar -->
   
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-image:linear-gradient(62deg, #181818, #075498)">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
         <img src="{% static 'img/AdminLTELogo.png'%}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -314,7 +314,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="container-fluid">
           <!-- <div class="row"> -->
 
-            {% include 'app/messages.html'%}
+            {% include 'shortage/messages.html'%}
             {% block content %}
 
             {% endblock %}

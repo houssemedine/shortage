@@ -685,7 +685,7 @@ def core(request):#show list of core
         filter='all'
     else:
         data=Core.undeleted_objects.all().exclude(Q(status='Close') | Q(status='Refuse')).order_by('-id')
-    return render(request,r'app\core.html',{'data':data,'filter':filter})
+    return render(request,r'shortage\core.html',{'data':data,'filter':filter})
 
 @allowed_users(allowed_roles=['users','administrators'])
 def create_core(request):#create new core
@@ -696,7 +696,7 @@ def create_core(request):#create new core
         print(data.first())
         if data:
             messages.warning(request,'Core is already exist !')
-            # return render(request,'app/core_history.html',{'pk':data.first().id,'data':data})
+            # return render(request,'shortage/core_history.html',{'pk':data.first().id,'data':data})
             return core_history(request,data.first().id)
         else:
             myform = Myform(request.POST)
@@ -709,7 +709,7 @@ def create_core(request):#create new core
                 messages.success(request,'Core added sucessfully')
                 return redirect('core')
 
-    return render(request,'app\create_core.html',{'myform' : Myform})
+    return render(request,'shortage\create_core.html',{'myform' : Myform})
 
 @allowed_users(allowed_roles=['administrators'])
 def update_core(request,pk): #function for update core
@@ -723,7 +723,7 @@ def update_core(request,pk): #function for update core
         print(data.first())
         if data:
             messages.warning(request,'Core is already exist !')
-            # return render(request,'app/core_history.html',{'pk':data.first().id,'data':data})
+            # return render(request,'shortage/core_history.html',{'pk':data.first().id,'data':data})
             return core_history(request,data.first().id)
         else:
             if myform.is_valid():
@@ -732,7 +732,7 @@ def update_core(request,pk): #function for update core
                 return redirect('core')
             else:
                 messages.error(request, 'Invalid form submission.') 
-    return render(request,'app/updateForm.html',{'core' : core,'myform' : myform})
+    return render(request,'shortage/updateForm.html',{'core' : core,'myform' : myform})
 
 @allowed_users(allowed_roles=['administrators'])
 def delete_core(request,pk): #function soft-delete
@@ -746,7 +746,7 @@ def delete_core(request,pk): #function soft-delete
 def core_history(request,pk):
     data=CoreHistory.objects.all().filter(core_id=pk).order_by('-id')
     core=Core.objects.get(id=pk)
-    return render(request,'app/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core})
+    return render(request,'shortage/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core})
 
 
 def save_core_history(request,pk):
@@ -953,10 +953,10 @@ def overview(request):
     #End Pagination
 
 
-    return render(request,'app/overview.html',{'records':records})
+    return render(request,'shortage/overview.html',{'records':records})
 def kpi(request):
     divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
-    return render(request,'app/kpi.html',{'divisions':divisions})
+    return render(request,'shortage/kpi.html',{'divisions':divisions})
 
 
 

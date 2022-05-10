@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">   
             <div class="col-md-12">
-                <div class="card" >
+                <div class="card card-shadow " >
                     <div class="card-header">
                          <h3 class="card-title">List Of Core</h3>
                          <form action="{% url 'core' %}" method="POST" style="margin-left: 90%;">
@@ -26,7 +26,10 @@
                     </div>
                     <div class="card-body">
                       <div style='margin-bottom:10px' >
-                        <a href="{% url 'create_core' %}" class="btn btn-block btn-outline-primary btn-sm " style='width:100px;text-align:center'data-toggle="tooltip" data-original-title="Create New Core">New</a>
+                        <a href="{% url 'create_core' %}" >
+                        <button class="profile-card__button button--blue"data-toggle="tooltip" data-original-title="Create New Core">New</button>
+                        </a>
+
                       </div>
                       <div style='overflow:auto;width:100%'>
                           <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
