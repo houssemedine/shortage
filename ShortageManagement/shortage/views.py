@@ -769,6 +769,8 @@ def save_core_history(request,pk):
 
 #overview
 def overview(request):
+    divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
+
     #Call all files
     data_zpp=ZPP_MD_Stock.objects.values('year','week','material','vendor','mrp_element','Input_need','available_quantity','division')
     data_zmm=ZMM_CARNET_CDE_IS.objects.values('year','week','material','validated_delivery_date','confirmed_quantity','purchasing_group','vendor_name','validated_delivery_date','contractual_delivery_date','division')
@@ -953,7 +955,7 @@ def overview(request):
     #End Pagination
 
 
-    return render(request,'shortage/overview.html',{'records':records})
+    return render(request,'shortage/overview.html',{'records':records,'divisions':divisions})
 def kpi(request):
     divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
     return render(request,'shortage/kpi.html',{'divisions':divisions})

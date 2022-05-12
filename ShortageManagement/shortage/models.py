@@ -412,6 +412,10 @@ class Core(Soft_delete): #Model For Core
     closing_date=models.DateTimeField(null=True)
     duration_of_the_event=models.CharField(max_length=30,null=True)
 
+
+    def __unicode__(self):
+        return self.material
+
 class CoreHistory(models.Model): #Model For Core history
     core=models.ForeignKey(Core,on_delete=models.CASCADE)
     created_on=models.DateTimeField()

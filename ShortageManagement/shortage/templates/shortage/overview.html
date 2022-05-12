@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load bootstrap_icons %}
 {% block content %}
+<div class="row">
+  {%include 'shortage/filters.html'%}
+</div>
+<center><button class="profile-card__button button--blue">Apply</button></center>
+<hr>
 <div class="row"> 
   <ul class="pagination justify-content-end pull-left col-6 offset-6">
     {% if   records.has_previous %}
