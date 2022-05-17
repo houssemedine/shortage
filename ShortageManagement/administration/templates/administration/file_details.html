@@ -27,11 +27,16 @@
                                             <td>{{data.uploaded_by}}</td>
                                             <td>{{data.uploaded_at}}</td> 
                                             <td >
+                                              <button type="button" class="btn btn-primary-outline" data-toggle="tooltip" data-original-title="">
                                                 <a href ="{% url 'file_content' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Show content of file "><i class="fa-regular fa-folder-open"></i></a>
+                                              </button>
                                             </td> 
-                                             <td>
-                                                <a href ="{% url 'delete_file' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Delete file" ><i class="fa-regular fa-trash-can"  style="color:red" ></i></a>
-                                             </td> 
+                                            <td>
+                                                <!-- <a href ="{% url 'delete_file' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Delete file" ><i class="fa-regular fa-trash-can"  style="color:red" ></i></a> -->
+                                                <button type="button" class="btn btn-danger-outline" data-namefile='{{namefile}}' data-week='{{week}}' data-week='{{year}}'  data-toggle="modal" data-target="#deleteModel">
+                                                    <i class="fa-regular fa-trash-can"  style="color:red"></i>
+                                                </button>
+                                             </td>  
                                         {%empty%}
                                             <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
                                         </tr>
@@ -41,12 +46,42 @@
                 </div>
             </div>
         </div>
+            <!-- Modal -->
+    <!--Modal to delete file -->
+    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href =""  id='deletelink' class="btn btn-danger" >Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<script>
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip({
-        placement : 'top'
+<script >
+    $('#deleteModel').on('show.bs.modal', function (event) {
+      var namefile = $(event.relatedTarget).data('namefile');
+      var year = $(event.relatedTarget).data('year');
+      var week = $(event.relatedTarget).data('week');
+
+
+      $(this).find(".modal-body").text('Are you sure to delete file number: '+namefile);
+      document.getElementById("deletelink").href="/administration/delete_file/"+year+week+namefile; 
     });
-});
-</script>
+  
+   $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip({
+              placement : 'top'
+          });
+      });
+  </script>    
 {%endblock%}

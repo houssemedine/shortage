@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">   
+            <div class="col-md-12">
+                <div class="card card-shadow " >
+                    <div class="card-header">
+                         <h3 class="card-title">List Of Mrp Element</h3>
+                         <form action="{% url 'mrp_element' %}" method="POST" style="margin-left: 90%;">
+                         <div class="card-tools">
+                           {%if filter == 'all' %}
+                           <a href="{% url 'mrp_element'%}" class="btn btn-tool" data-toggle="tooltip" data-original-title="Hide closed and refuse"><i class="fa-solid fa-eye" ></i></a>
+                           {%else%}
+                            {% csrf_token %}
+                             <button name ='filter' type="submit"  class="btn btn-tool" data-toggle="tooltip" data-original-title="Show All">
+                               <i class="fa-solid fa-eye-slash"></i>
+                              </button>
+                              {%endif%}
+                              <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                <i class="fas fa-expand"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                              </button>
+                            </div>
+                          </form>
+                    </div>
+                    <div class="card-body">
+                      <div style='margin-bottom:10px' >
+                        <a href="{% url 'create_mrp_element' %}" >
+                        <button class="profile-card__button button--blue"data-toggle="tooltip" data-original-title="Create New Mrp Element">New</button>
+                        </a>
+
+                      </div>
+                      <div style='overflow:auto;width:100%'>
+                          <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
+                                  <thead>
+                                      <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Mrp_element</th>
+                                      <th scope="col">FR</th>
+                                      <th scope="col">EN</th>
+                                      <th scope="col">Take_into_account</th>
+                                      </tr>
+                                  </thead>
+                              <tbody >
+                                      {% for data in data %}
+                                      <tr>
+                                          <td>{{data.id}}</td>
+                                          <td>{{data.mrp_element}}</td>
+                                          <td>{{data.fr}}</td>
+                                          <td>{{data.en}}</td>
+                                          <td>{{data.take_into_account}}</td>
+                                          <td>
+                                            <button type="button" class="btn btn-primary-outline" data-toggle="tooltip" data-original-title="Update Mrp element">
+                                              <a href="{% url 'update_mrp_element' data.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                            </button>
+                                          <button type="button" class="btn btn-danger-outline" data-id='{{data.id}}'  data-toggle="modal" data-target="#deleteModel">
+                                            <i class="fa-regular fa-trash-can"  style="color:red"></i>
+                                          </button>
+                                          </td>  
+                                          {%empty%}
+                                          <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
+                                      </tr>
+                                      {% endfor %}     
+                              </tbody>
+                          </table>
+                      </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+  <!-- Modal -->
+  <!--Modal to delete core -->
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a href =""  id='deletelink' class="btn btn-danger" >Delete</a>
+        </div>
+      </div>
+    </div>
+  </div> 
+ <script >
+  $('#deleteModel').on('show.bs.modal', function (event) {
+    var id = $(event.relatedTarget).data('id');
+    $(this).find(".modal-body").text('Are you sure to delete mrp element number: '+id);
+    document.getElementById("deletelink").href="/administration/mrp_element/"+id +"/delete"; 
+  });
+
+ $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip({
+            placement : 'top'
+        });
+    });
+</script> 
+{% endblock content %}

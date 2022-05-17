@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load bootstrap_icons %}
+{% load static %}
+{% block content %}
+
+<a href ="{% url 'apro_spec' %}" >{% bs_icon 'arrow-left' size='2em'%}</a>
+<div class='content'>
+        <div class="container-fuild">
+                <div class='row'>
+                        <div class='col-3'>
+                        </div>
+                        <div class='col-6'>
+                                <div class='card card-primary card-outline card-shadow'>
+                                        <div class='card-header'>
+                                                <h5>Create New Apro Spec </h5>
+                                        </div>
+                                        <div class='body'>
+                                                <form method= "POST" class ="form-group-inline" action="{% url 'create_apro_spec' %}">
+                                                        <div class="row">
+                                                                <div class ="col-2">
+                                                                </div>
+                                                                <div class="col-8">
+                                                                {% csrf_token %}
+                                                                {{form_apro|crispy}}
+                                                                <div class="d-flex justify-content-center" style='margin-bottom:10px'>   
+                                                                 <input type="submit" class='profile-card__button button--blue'value="Add" id ="Add">
+                                                                </div>
+                                                                </div>
+                                                        </div>
+                                                </form>
+                                                <div class ="col-2">
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <div class='col-3'>
+                </div>
+        </div>
+</div>
+{% endblock%}

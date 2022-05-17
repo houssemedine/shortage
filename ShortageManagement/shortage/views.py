@@ -1,12 +1,11 @@
 # Create your views here.
-from __future__ import division
-from cgitb import html
 from io import StringIO
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db.utils import OperationalError
 from django.contrib import messages
 import pandas as pd
+import numpy as np
 import psycopg2
 from datetime import datetime
 import pathlib
@@ -774,11 +773,12 @@ def overview(request):
     data_zmm=ZMM_CARNET_CDE_IS.objects.values('year','week','material','validated_delivery_date','confirmed_quantity','purchasing_group','vendor_name','validated_delivery_date','contractual_delivery_date','division')
     data_mb52=MB52.objects.values('year','week','value_free_use','material','division','store')
     data_tl001l=SE16N_T001L.objects.values('year','week','descr_of_storage_loc','division','store')
-    data_cepc=SE16N_CEPC.objects.values('year','week','district','profit_center')
+    data_cepc=SE16N_CEPC.objects.values('year','week','district','profit_center','profit_center_short_text_for_matchcode')
     data_st=Stock_transit.objects.values('year','week','num_parcel','delivery_qty','material')
     data_mara_marc=ART_MARA_MARC.objects.values('year','week','tyar','mp','gac','a_s','typ','ctrpr','dpr','material','division')
     data_t024=SE16N_T024.objects.values('year','week','purchasing_group')
     data_mdma=MDMA.objects.values('year','week','forecast_delivery_time','planning_unit','material','division')
+    data_mrp_element=Mrp_element.undeleted_objects.values('fr','en','take_into_account')
 
     #Convert to data frame
     df_zpp=pd.DataFrame(list(data_zpp))
@@ -790,7 +790,58 @@ def overview(request):
     df_mara_marc=pd.DataFrame(list(data_mara_marc))
     df_mdma=pd.DataFrame(list(data_mdma))
     df_t024=pd.DataFrame(list(data_t024))
+    df_mrp_element=pd.DataFrame(list(data_mrp_element))
 
+    ##############################
+    #ZPP and MRP ELEMENT 
+    ##############################
+    df_zpp=df_zpp.head(50)
+    df_mrp_element_dict_fr=dict(zip(df_mrp_element.fr,df_mrp_element.take_into_account))
+    df_zpp['take_into_account_fr']=df_zpp['mrp_element'].map(df_mrp_element_dict_fr)
+    df_mrp_element_dict_en=dict(zip(df_mrp_element.en,df_mrp_element.take_into_account))
+    df_zpp['take_into_account_en']=df_zpp['mrp_element'].map(df_mrp_element_dict_en)
+    df_zpp=df_zpp[(df_zpp['take_into_account_en'] == 'Y') |  (df_zpp['take_into_account_fr'] == 'Y')]
+    
+    ##############################
+    #MARA MARC and  MDMA
+    ##############################
+    #Add  new key to DF mara_marc
+    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
+    #Add key to DF
+    df_mdma['key']=df_mdma['year'].astype(str)+df_mdma['week'].astype(str)+df_mdma['material'].astype(str)+df_mdma['division'].astype(str)
+    #Convert to Dict
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key, df_mara_marc.a_s))
+    df_mdma_dict=dict(zip(df_mdma.key,df_mdma.planning_unit)) 
+
+    df_mara_marc['planning_unit']=df_mara_marc['key'].map(df_mdma_dict)
+    df_mara_marc.a_s=df_mara_marc.a_s.fillna(0)
+    df_mara_marc.a_s=df_mara_marc.a_s.astype(str)
+    df_mara_marc['mrp_area']=np.where(df_mara_marc.a_s.str.startswith('5'),df_mara_marc['planning_unit'],'')
+    #condition on a_s
+    # df_mara_marc=df_mara_marc[df_mara_marc.a_s.str.startswith('5')]
+
+
+        ##############################
+    #MARA MARC and  CEPC
+    ##############################
+    #Delete key
+    del df_mara_marc['key'] 
+    #Add  new key to DF mara_marc
+    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['ctrpr'].astype(str)
+    #Add key to DF
+    df_cepc['key']=df_cepc['year'].astype(str)+df_cepc['week'].astype(str)+df_cepc['profit_center'].astype(str)
+     #Convert to Dict
+    df_cepc_dict_district=dict(zip(df_cepc.key,df_cepc.district)) 
+    df_cepc_dict_profit_center_short_text_for_matchcode=dict(zip(df_cepc.key,df_cepc.profit_center_short_text_for_matchcode)) 
+
+    #Get data from dict using map
+    df_mara_marc['district']=df_mara_marc['key'].map(df_cepc_dict_district)
+    df_mara_marc['profit_center_designation']=df_mara_marc['key'].map(df_cepc_dict_profit_center_short_text_for_matchcode)
+    df_mara_marc.to_excel('mara_marc.xlsx')
+  
+
+  
+    #Delete dataframe not used
     ##############################
     #MB52 and T001L
     ##############################
@@ -801,143 +852,127 @@ def overview(request):
     df_tl001l_dict=dict(zip(df_tl001l.key,df_tl001l.descr_of_storage_loc))
     #Get data from dict using map
     df_mb52['descr_of_storage_loc']=df_mb52['key'].map(df_tl001l_dict)
+     ##############################
+    #ZPP and MB52
+    ##############################
+    df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
+    df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
+    #Convert to dict
+    df_mb52_dict_value_free_use=dict(zip(df_mb52.key,df_mb52.value_free_use))
+    print(df_mb52_dict_value_free_use)
+    df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict_value_free_use)
+
     
+    df_mb52_dict_descr_of_storage_loc=dict(zip(df_mb52.key,df_mb52.descr_of_storage_loc))
+    print(df_mb52_dict_descr_of_storage_loc)
+    df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict_descr_of_storage_loc)
+    
+    df_zpp.to_excel('zpp.xlsx')
+    df_mb52.to_excel('mb52.xlsx')
     #Delete dataframe not used
     
     ##############################
     #MARA MARC and T024
     ##############################
     #Add key to DF
-    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['gac'].astype(str)
-    df_t024['key']=df_t024['year'].astype(str)+df_t024['week'].astype(str)+df_t024['purchasing_group'].astype(str)
-    #Convert to Dict
-    df_t024_dict=dict(zip(df_t024.key,df_t024.purchasing_group))    
-    # #Get data from dict using map
-    df_mara_marc['purchasing_group']=df_mara_marc['key'].map(df_t024_dict)
-  
-    #Delete dataframe not used
-
-    ##############################
-    #MARA MARC and  MDMA
-    ##############################
-    #Delete key
-    # del df_mara_marc['key'] 
-    # #Add  new key to DF mara_marc
-    # df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
-    # #Add key to DF
-    # df_mdma['key']=df_mdma['year'].astype(str)+df_mdma['week'].astype(str)+df_mdma['material'].astype(str)+df_mdma['division'].astype(str)
+    # df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['gac'].astype(str)
+    # df_t024['key']=df_t024['year'].astype(str)+df_t024['week'].astype(str)+df_t024['purchasing_group'].astype(str)
     # #Convert to Dict
-    # df_mdma_dict=dict(zip(df_mdma.key,df_mdma.forecast_delivery_time)) 
-    # df_mdma_dict=dict(zip(df_mdma.key,df_mdma.planning_unit))    
-    # #Get data from dict using map
-    # df_mara_marc['forecast_delivery_time']=df_mara_marc['key'].map(df_mdma_dict)
-    # df_mara_marc['planning_unit']=df_mara_marc['key'].map(df_mdma_dict)
-    # print(df_mara_marc)
-     #Delete dataframe not used
-
-    ##############################
-    #MARA MARC and  CEPC
-    ##############################
-    #Delete key
-    del df_mara_marc['key'] 
-    #Add  new key to DF mara_marc
-    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['ctrpr'].astype(str)
-    #Add key to DF
-    df_cepc['key']=df_cepc['year'].astype(str)+df_cepc['week'].astype(str)+df_cepc['profit_center'].astype(str)
-     #Convert to Dict
-    df_cepc_dict=dict(zip(df_cepc.key,df_cepc.district)) 
-    #Get data from dict using map
-    df_mara_marc['district']=df_mara_marc['key'].map(df_cepc_dict)
+    # df_t024_dict=dict(zip(df_t024.key,df_t024.purchasing_group))    
+    # # #Get data from dict using map
+    # df_mara_marc['purchasing_group']=df_mara_marc['key'].map(df_t024_dict)
   
-    #Delete dataframe not used
+    # #Delete dataframe not used
 
-    ##############################
-    #ZPP and  ST
-    ##############################
-    #Add key to DF
-    df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)
-    df_st['key']=df_st['year'].astype(str)+df_st['week'].astype(str)+df_st['material'].astype(str)
 
-    #Convert to Dict
-    df_st_dict=dict(zip(df_st.key,df_st.num_parcel))
-    df_st_dict=dict(zip(df_st.key,df_st.delivery_qty))
+    # ##############################
+    # #ZPP and  ST
+    # ##############################
+    # #Add key to DF
+    # df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)
+    # df_st['key']=df_st['year'].astype(str)+df_st['week'].astype(str)+df_st['material'].astype(str)
 
-    #Get data from dict using map
-    df_zpp['num_parcel']=df_zpp['key'].map(df_st_dict)
-    df_zpp['delivery_qty']=df_zpp['key'].map(df_st_dict)
+    # #Convert to Dict
+    # df_st_dict=dict(zip(df_st.key,df_st.num_parcel))
+    # df_st_dict=dict(zip(df_st.key,df_st.delivery_qty))
+
+    # #Get data from dict using map
+    # df_zpp['num_parcel']=df_zpp['key'].map(df_st_dict)
+    # df_zpp['delivery_qty']=df_zpp['key'].map(df_st_dict)
 
     #Delete dataframe not used
 
     ##############################
     #ZPP and  MB52
     ##############################
-    #Delete key
-    del df_zpp['key'] 
-    del df_mb52['key']
-    #Add key to DF
-    df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
-    df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
-    #Convert to Dict
-    df_mb52_dict=dict(zip(df_mb52.key,df_mb52.value_free_use))
-    df_mb52_dict=dict(zip(df_mb52.key,df_mb52.descr_of_storage_loc))
-    #Get data from dict using map
-    df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict)
-    df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict)
+    # #Delete key
+    # del df_zpp['key'] 
+    # del df_mb52['key']
+    # #Add key to DF
+    # df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
+    # df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
+    # #Convert to Dict
+    # df_mb52_dict=dict(zip(df_mb52.key,df_mb52.value_free_use))
+    # df_mb52_dict=dict(zip(df_mb52.key,df_mb52.descr_of_storage_loc))
+    # #Get data from dict using map
+    # df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict)
+    # df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict)
+
      #Delete dataframe not used
 
-    ##############################
-    #ZPP and  ZMM
-    ##############################
-    #Add key to DF
-    df_zmm['key']=df_zmm['year'].astype(str)+df_zmm['week'].astype(str)+df_zmm['material'].astype(str)+df_zmm['division'].astype(str)
-    #Convert to Dict
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.validated_delivery_date))
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.confirmed_quantity))
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.purchasing_group))
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.vendor_name))
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.validated_delivery_date))
-    df_zmm_dict=dict(zip(df_zmm.key,df_zmm.contractual_delivery_date))
-    #Get data from dict using map
-    df_zpp['validated_delivery_date']=df_zpp['key'].map(df_zmm_dict)
-    df_zpp['confirmed_quantity']=df_zpp['key'].map(df_zmm_dict)
-    df_zpp['purchasing_group']=df_zpp['key'].map(df_zmm_dict)
-    df_zpp['vendor_name']=df_zpp['key'].map(df_zmm_dict)
-    df_zpp['validated_delivery_date']=df_zpp['key'].map(df_zmm_dict)
-    df_zpp['contractual_delivery_date']=df_zpp['key'].map(df_zmm_dict)
-    #Delete dataframe not used
-    ##############################
-    #ZPP and  MARA MARC
-    ##############################
-    #Delete key 
-    del df_mara_marc['key']
-    #Add key to DF
-    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
-    #Convert to Dict
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.tyar))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.mp))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.gac))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.a_s))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.typ))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.ctrpr))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.dpr))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.district))
-    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.planning_unit))
-    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.forecast_delivery_time))
-    df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.purchasing_group))
-    #Get data from dict using map
-    df_zpp['tyar']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['mp']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['gac']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['a_s']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['typ']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['ctrpr']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['dpr']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['district']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['planning_unit']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['forecast_delivery_time']=df_zpp['key'].map(df_mara_marc_dict)
-    df_zpp['purchasing_group']=df_zpp['key'].map(df_mara_marc_dict)
-    del df_zpp['key']
-    df_zpp['id']=df_zpp.index
+    # ##############################
+    # #ZPP and  ZMM
+    # ##############################
+    # #Add key to DF
+    # df_zmm['key']=df_zmm['year'].astype(str)+df_zmm['week'].astype(str)+df_zmm['material'].astype(str)+df_zmm['division'].astype(str)
+    # #Convert to Dict
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.validated_delivery_date))
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.confirmed_quantity))
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.purchasing_group))
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.vendor_name))
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.validated_delivery_date))
+    # df_zmm_dict=dict(zip(df_zmm.key,df_zmm.contractual_delivery_date))
+    # #Get data from dict using map
+    # df_zpp['validated_delivery_date']=df_zpp['key'].map(df_zmm_dict)
+    # df_zpp['confirmed_quantity']=df_zpp['key'].map(df_zmm_dict)
+    # df_zpp['purchasing_group']=df_zpp['key'].map(df_zmm_dict)
+    # df_zpp['vendor_name']=df_zpp['key'].map(df_zmm_dict)
+    # df_zpp['validated_delivery_date']=df_zpp['key'].map(df_zmm_dict)
+    # df_zpp['contractual_delivery_date']=df_zpp['key'].map(df_zmm_dict)
+    # #Delete dataframe not used
+    # ##############################
+    # #ZPP and  MARA MARC
+    # ##############################
+    # #Delete key 
+    # del df_mara_marc['key']
+    # #Add key to DF
+    # df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
+    # #Convert to Dict
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.tyar))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.mp))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.gac))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.a_s))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.typ))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.ctrpr))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.dpr))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.district))
+    # # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.planning_unit))
+    # # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.forecast_delivery_time))
+    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.purchasing_group))
+    # #Get data from dict using map
+    # df_zpp['tyar']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['mp']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['gac']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['a_s']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['typ']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['ctrpr']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['dpr']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['district']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['planning_unit']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['forecast_delivery_time']=df_zpp['key'].map(df_mara_marc_dict)
+    # df_zpp['purchasing_group']=df_zpp['key'].map(df_mara_marc_dict)
+    # del df_zpp['key']
+    # df_zpp['id']=df_zpp.index
     df_zpp=df_zpp.head(10)
     print(df_zpp)
     # df_zpp.to_csv(r'C:\Users\bibas\Downloads\zpp.csv',index=False)

@@ -1,5 +1,5 @@
 from django import forms
-from shortage.models import Core,CoreHistory
+from shortage.models import Core,CoreHistory,Mrp_element,Apro_spec
 
 class Myform(forms.ModelForm):
     class Meta:
@@ -14,8 +14,8 @@ class Myform(forms.ModelForm):
             'updated_on': forms.DateInput(format=('%m/%d/%Y'),attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
             'material': forms.TextInput(attrs={
 
-                'hx-trigger': 'keyup',
-                'hx-target': '#div_id_material',
+                # 'hx-trigger': 'keyup',
+                # 'hx-target': '#div_id_material',
                })
         }
     def clean_material(self):
@@ -30,7 +30,18 @@ class Form(forms.ModelForm):
         fields = '__all__'
         exclude =['core','created_on','created_by','action']
         
-   
-        
+
+class Form_mrp(forms.ModelForm):
+     class Meta:
+        model = Mrp_element
+        fields = '__all__'
+        exclude =['year','week','uploaded_by','uploaded_at','deleted','deleted_by','deleted_on']
+
+
+class Form_apro(forms.ModelForm):
+     class Meta:
+        model = Apro_spec
+        fields = '__all__'
+        exclude =['year','week','uploaded_by','uploaded_at','deleted','deleted_by','deleted_on']
 
            

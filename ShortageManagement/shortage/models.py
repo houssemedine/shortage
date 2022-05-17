@@ -1,4 +1,3 @@
-from calendar import week
 from datetime import  datetime
 from django.db import models
 
@@ -419,47 +418,25 @@ class CoreHistory(models.Model): #Model For Core history
     comment=models.TextField(null=True)
     action=models.CharField(max_length=30,null=True)
 
-class Result(models.Model):
-    material =models.CharField(max_length=30,null=True) #ZPP_MD_STOCK:material
-    division =models.IntegerField(null=True) #files selection
-    mrp_area =models.CharField(max_length=30,null=True)
-    profit_center =models.CharField(max_length=30,null=True)
-    purchase_group_designation=models.CharField(max_length=30,null=True)#MARA-MARC : GAc
-    scope_allocation=models.CharField(max_length=30,null=True)
-    allocated_supplier=models.CharField(max_length=30,null=True)#ZPP_MD_STOCK : vendor
-    planned_delivery_time=models.CharField(max_length=30,null=True)
-    material_type=models.CharField(max_length=30,null=True)#MARA-MARC : TyAr
-    material_status=models.FloatField(null=True)#MARA-MARC : MP
-    special_procurement_type=models.FloatField(null=True)#MARA-MARC : A.S
-    planification_type=models.CharField(max_length=30,null=True)#MARA-MARC : TyP
-    lot_qm=models.FloatField(null=True) #ZPP_MD_STOCK : MRP 
-    stock_in_transit=models.IntegerField(null=True)# Stock_transit: delivery_qty
-    package_number=models.CharField(max_length=30,null=True)#Stock_transit:  num_parcel
-    warehouse_stock=models.FloatField(null=True)#
-    workshop_stock=models.FloatField(null=True)
-    stock_zpush=models.FloatField(null=True)
-    stock_quality=models.FloatField(null=True)
-    other_stocks=models.FloatField(null=True)
-    stock_in_supply_division=models.FloatField(null=True)
-    core=models.ForeignKey(Core,on_delete=models.CASCADE)
-    core_status=models.CharField(max_length=30,null=True,default='To do')
-    core_creation=models.TextField(null=True)
-    core_comment=models.TextField(null=True)
-    ongoing_po=models.CharField(max_length=30,null=True)
-    confirmed_delivery_date=models.DateTimeField(null=True) #ZMM_CARNET_CDE_IS :validated_delivery_date 
-    quantity_to_receive=models.FloatField(null=True) #ZMM_CARNET_CDE_IS :confirmed_quantity
-    procurement_agent=models.CharField(max_length=50,null=True)#ZMM_CARNET_CDE_IS :purchasing_group
-    po_supplier=models.CharField(max_length=50,null=True)#ZMM_CARNET_CDE_IS :vendor_name
-    date_of_missing=models.DateTimeField(null=True)
-    missing_status=models.CharField(max_length=30,null=True)
-    action=models.CharField(max_length=30,null=True)
-    comment=models.CharField(max_length=30,null=True)
-    action_status=models.CharField(max_length=30,null=True)
-    needs_in_the_past=models.FloatField(null=True) 
-    backlog_p_qty=models.FloatField(null=True) 
-    coverage_time=models.IntegerField(null=True)
-    week=models.FloatField(null=True)
-    week_x=models.FloatField(null=True)
+# 
+class Mrp_element(Soft_delete): #Model For mrp_element
+    year=models.IntegerField(null=True)
+    week=models.IntegerField(null=True)
+    uploaded_by=models.IntegerField(null=True)
+    uploaded_at=models.DateTimeField(null=True)
+    mrp_element = models.CharField(max_length=30,null=True) #élément mrp
+    fr = models.CharField(max_length=30,null=True) #FR
+    en = models.CharField(max_length=30,null=True) #EN
+    take_into_account =models.CharField(max_length=15,null=True) #Take into account
+
+class Apro_spec(Soft_delete):#Model For  apro spec
+    year=models.IntegerField(null=True)
+    week=models.IntegerField(null=True)
+    uploaded_by=models.IntegerField(null=True)
+    uploaded_at=models.DateTimeField(null=True)
+    appro_type=models.CharField(max_length=30,null=True) #Type appro
+    division = models.IntegerField(null=True) #Division
+
 
 
     

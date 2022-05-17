@@ -190,8 +190,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-image:linear-gradient(62deg, #181818, #075498)">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
-        <img src="{% static 'img/AdminLTELogo.png'%}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <a href="" class="brand-link">
+        <img src="{% static 'img/shortage.png'%}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Shortage Management</span>
       </a>
   
@@ -200,7 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{% static 'img/user2-160x160.jpg'%}" class="img-circle elevation-2" alt="User Image">
+            <img src="{% static 'img/avatar2.png'%}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a href="#" class="d-block">Alexander Pierce</a>
@@ -283,6 +283,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <p>Files list</p>
                 </a>
             </li>
+            <li class="nav-item">
+              <a href="{% url  'mrp_element' %}" class="nav-link                 
+              {% if request.get_full_path == '/administration/mrp_element' %} active 
+              {% endif %}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Mrp element</p>
+              </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url  'apro_spec' %}" class="nav-link                 
+            {% if request.get_full_path == '/administration/apro_spec' %} active 
+            {% endif %}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Appro Spec</p>
+            </a>
+        </li>
             </ul>
 
             </li>
