@@ -852,6 +852,18 @@ def overview(request):
     df_tl001l_dict=dict(zip(df_tl001l.key,df_tl001l.descr_of_storage_loc))
     #Get data from dict using map
     df_mb52['descr_of_storage_loc']=df_mb52['key'].map(df_tl001l_dict)
+    df_mb52.insert(0,'stock_type',"",True)
+    df_mb52.loc[( df_mb52.descr_of_storage_loc.str.contains("PRINC")) | (df_mb52.descr_of_storage_loc.str.contains("MAIN"))  , "stock_type"] = "warehouse_stock"
+    df_mb52.loc[( df_mb52.descr_of_storage_loc.str.contains("BDL") ) | (df_mb52.descr_of_storage_loc.str.contains("PROD")) | (df_mb52.descr_of_storage_loc.str.contains("PRD")) | (df_mb52.descr_of_storage_loc.str.contains("LS"))| (df_mb52.descr_of_storage_loc.str.contains("SEMI")) , "stock_type"] = "workshop_stock"
+    df_mb52.loc[( df_mb52.descr_of_storage_loc.str.contains("PUSH") ) | (df_mb52.descr_of_storage_loc.str.contains("FTWZ")) , "stock_type"] = "stock_zpush"
+    df_mb52.loc[( df_mb52.descr_of_storage_loc.str.contains("QUAL") ) | (df_mb52.descr_of_storage_loc.str.contains("QT")) | (df_mb52.descr_of_storage_loc.str.contains("QLt")) | (df_mb52.descr_of_storage_loc.str.contains("QLT")) , "stock_type"] = "stock_quality"
+    df_mb52.loc[( df_mb52.descr_of_storage_loc.isna() ), "stock_type"] = "other_stocks"
+
+
+
+
+
+
      ##############################
     #ZPP and MB52
     ##############################
