@@ -8,24 +8,26 @@ class MB52(models.Model): #Model For File  MB52
     week=models.IntegerField(null=True)
     uploaded_by=models.IntegerField(null=True)
     uploaded_at=models.DateTimeField(null=True)
+    stock_type=models.CharField(max_length=100,null=True) #add calculate column at upload 
     material = models.CharField(max_length=30,null=True) #Numéro d'article	
     division = models.IntegerField(null=True) #Division
-    store = models.IntegerField(null=True) #Magasin
-    store_level_deletion_indicator =models.CharField(max_length=15,null=True) #Tém.suppr.:niv. mag	
-    unit=models.CharField(max_length=5,null=True) #Unité de qté base
-    for_free_use= models.FloatField(null=True) #A utilisation libre	
-    currency=models.CharField(max_length=5,null=True) #Devise	
+    # store = models.IntegerField(null=True) #Magasin
+    # store_level_deletion_indicator =models.CharField(max_length=15,null=True) #Tém.suppr.:niv. mag	
+    # unit=models.CharField(max_length=5,null=True) #Unité de qté base
+    # for_free_use= models.FloatField(null=True) #A utilisation libre	
+    # currency=models.CharField(max_length=5,null=True) #Devise	
     value_free_use=models.FloatField(null=True)#Val. utilis. libre
-    transit_transfer=models.FloatField(null=True) #Transit et transfert
-    transit_transfer_value = models.FloatField(null=True) #Val. en Trnst&Tsft	
-    in_quality_control = models.FloatField(null=True) #En contrôle qualité	
-    value_quality_control = models.FloatField(null=True) #Val. ds ctrl.qual.	
-    non_free_stock=models.FloatField(null=True) #Stock non libre	
-    non_free_value =models.FloatField(null=True) #Valeur non libre
-    blocked=models.FloatField(null=True) #Bloqué	
-    blocked_stock_value=models.FloatField(null=True) #Val. stock bloqué	
-    returns=models.FloatField(null=True) #Retours	
-    blocked_return_stock_value=models.FloatField(null=True) #Val.stk ret.bloq.   
+    # transit_transfer=models.FloatField(null=True) #Transit et transfert
+    # transit_transfer_value = models.FloatField(null=True) #Val. en Trnst&Tsft	
+    # in_quality_control = models.FloatField(null=True) #En contrôle qualité	
+    # value_quality_control = models.FloatField(null=True) #Val. ds ctrl.qual.	
+    # non_free_stock=models.FloatField(null=True) #Stock non libre	
+    # non_free_value =models.FloatField(null=True) #Valeur non libre
+    # blocked=models.FloatField(null=True) #Bloqué	
+    # blocked_stock_value=models.FloatField(null=True) #Val. stock bloqué	
+    # returns=models.FloatField(null=True) #Retours	
+    # blocked_return_stock_value=models.FloatField(null=True) #Val.stk ret.bloq.  
+    # descr_of_storage_loc = models.CharField(max_length=100,null=True) #add column from t001l
 
 
 
@@ -195,15 +197,19 @@ class ZPP_MD_Stock(models.Model): #Model For File ZPP_MD_Stock
     uploaded_at=models.DateTimeField(null=True)
     division = models.IntegerField(null=True) #Division
     material = models.CharField(max_length=30,null=True) #article	
-    plan_date=models.DateTimeField(null=True)#Dates 
+    # plan_date=models.DateTimeField(null=True)#Dates 
     mrp_element = models.CharField(max_length=30,null=True)#Elément MRP
-    data_for_planning_element= models.CharField(max_length=30,null=True)#Données pr élément planif
-    action_message= models.CharField(max_length=30,null=True)#Message d'action
+    # data_for_planning_element= models.CharField(max_length=30,null=True)#Données pr élément planif
+    # action_message= models.CharField(max_length=30,null=True)#Message d'action
     Input_need=models.CharField(max_length=30,null=True)#Entrée / besoin
     available_quantity= models.CharField(max_length=30,null=True)#Quantité disponible
-    reorder_date=models.DateTimeField(null=True)#Date réordonnanc.
+    # reorder_date=models.DateTimeField(null=True)#Date réordonnanc.
     vendor=models.CharField(max_length=30,null=True)#Fournisseur
-    customer=models.CharField(max_length=30,null=True)#Client
+    # customer=models.CharField(max_length=30,null=True)#Client
+    num_parcel=models.CharField(max_length=30,null=True) #col from ST 
+    delivery_qty=models.FloatField(null=True)#Col from ST
+    take_into_account_fr=models.CharField(max_length=15,null=True)
+    take_into_account_en=models.CharField(max_length=15,null=True)
 
 
 
@@ -241,6 +247,7 @@ class ART_MARA_MARC(models.Model): #Model For File ART_MARA_MARC
     week=models.IntegerField(null=True)
     uploaded_by=models.IntegerField(null=True)
     uploaded_at=models.DateTimeField(null=True)
+    scope_allocation=models.CharField(max_length=30,null=True) #col calculate at upload from cepc
     material = models.CharField(max_length=30,null=True) #article	
     material_designation= models.CharField(max_length=200,null=True) #Désignation article
     text_material= models.CharField(max_length=200,null=True) #Texte Article
@@ -311,6 +318,9 @@ class ART_MARA_MARC(models.Model): #Model For File ART_MARA_MARC
     no_ccr= models.CharField(max_length=30,null=True)#pas de CCR
     ccr_lot_size= models.FloatField(null=True)#Taille de lot du CCR
     uq8= models.CharField(max_length=30,null=True)#UQ
+    district = models.CharField(max_length=30,null=True)  #col from CEPC
+    profit_center_designation =models.CharField(max_length=100,null=True)#col from CEPC
+    purchasing_group_designation=models.CharField(max_length=20,null=True)# Col from T024
 
 
 class MDMA(models.Model):#Model For FIle MDMA

@@ -79,8 +79,8 @@
                                           <td>{{data.material}}</td>
                                           <td>{{data.division}}</td>
                                           <td>{{data.mrp_area}}</td>
-                                          <td>{{data.profit_center}}</td>
-                                          <td>{{data.gac}}</td>
+                                          <td>{{data.profit_center_designation}}</td>
+                                          <td>{{data.purchasing_group_designation}}</td>
                                           <td>{{data.scope_allocation}}</td>
                                           <td>{{data.vendor}}</td>
                                           <td></td>
@@ -189,14 +189,11 @@
       var typ = $(event.relatedTarget).data('typ');
       var mrp_element = $(event.relatedTarget).data('mrp_element');
       var delivery_qty = $(event.relatedTarget).data('delivery_qty');
-      var num_parcel  = $(event.relatedTarget).data('num_parcel');
+      var num_parcel  = $(event.relatedTarget).data('num_parcel'); 
       {% comment %} var validated_delivery_date  = $(event.relatedTarget).data('validated_delivery_date'); {% endcomment %}
       {% comment %} var confirmed_quantity  = $(event.relatedTarget).data('confirmed_quantity '); {% endcomment %}
       {% comment %} var vendor_name  = $(event.relatedTarget).data('vendor_name '); {% endcomment %}
-      // $(this).find(".modal-body  .inputtest").val(material);
       document.getElementById("datatable").innerHTML="<td>"+dpr+"</td><td>"+tyar+"</td><td>"+mp+"</td><td>"+a_s+"</td><td>"+typ+"</td><td>"+mrp_element+"</td><td>"+delivery_qty+"</td><td>"+num_parcel+"</td>";
-
-
       
     });
   
