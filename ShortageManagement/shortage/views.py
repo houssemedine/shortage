@@ -946,9 +946,6 @@ def overview(request):
     # Delete Key 
     del df_zpp['key']
     del df_mb52['key']
-
- 
-
     ##############################
     #MARA MARC and  MDMA
     ##############################
