@@ -1,3 +1,4 @@
+from __future__ import division
 from datetime import  datetime
 from django.db import models
 
@@ -6,8 +7,8 @@ from django.db import models
 class MB52(models.Model): #Model For File  MB52
     year=models.IntegerField(null=True)
     week=models.IntegerField(null=True)
-    uploaded_by=models.IntegerField(null=True)
-    uploaded_at=models.DateTimeField(null=True)
+    # uploaded_by=models.IntegerField(null=True)
+    # uploaded_at=models.DateTimeField(null=True)
     stock_type=models.CharField(max_length=100,null=True) #add calculate column at upload 
     material = models.CharField(max_length=30,null=True) #Numéro d'article	
     division = models.IntegerField(null=True) #Division
@@ -198,19 +199,18 @@ class ZPP_MD_Stock(models.Model): #Model For File ZPP_MD_Stock
     division = models.IntegerField(null=True) #Division
     material = models.CharField(max_length=30,null=True) #article	
     # plan_date=models.DateTimeField(null=True)#Dates 
-    mrp_element = models.CharField(max_length=30,null=True)#Elément MRP
+    # mrp_element = models.CharField(max_length=30,null=True)#Elément MRP
     # data_for_planning_element= models.CharField(max_length=30,null=True)#Données pr élément planif
     # action_message= models.CharField(max_length=30,null=True)#Message d'action
     Input_need=models.CharField(max_length=30,null=True)#Entrée / besoin
     available_quantity= models.CharField(max_length=30,null=True)#Quantité disponible
     # reorder_date=models.DateTimeField(null=True)#Date réordonnanc.
-    vendor=models.CharField(max_length=30,null=True)#Fournisseur
+    # vendor=models.CharField(max_length=30,null=True)#Fournisseur
     # customer=models.CharField(max_length=30,null=True)#Client
     num_parcel=models.CharField(max_length=30,null=True) #col from ST 
     delivery_qty=models.FloatField(null=True)#Col from ST
-    take_into_account_fr=models.CharField(max_length=15,null=True)
-    take_into_account_en=models.CharField(max_length=15,null=True)
-
+    # take_into_account_fr=models.CharField(max_length=15,null=True)
+    # take_into_account_en=models.CharField(max_length=15,null=True)
 
 
 class Stock_transit(models.Model): #Model For File Stock_transit
@@ -219,7 +219,7 @@ class Stock_transit(models.Model): #Model For File Stock_transit
     uploaded_by=models.IntegerField(null=True)
     uploaded_at=models.DateTimeField(null=True)
     pExp= models.CharField(max_length=30,null=True) #PExp
-    taken_plant = models.CharField(max_length=30,null=True)	#Division Prenante
+    division = models.IntegerField(null=True) 	#Division Prenante
     transfer_code= models.CharField(max_length=30,null=True)#Cde Transfert
     poscde= models.CharField(max_length=30,null=True)#PosCde
     tLvr= models.CharField(max_length=30,null=True)#TLvr.

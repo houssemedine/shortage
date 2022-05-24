@@ -88,12 +88,12 @@ def uploaded_files(request):
             #control statment to check if files exists    
             if (file_mb52.exists()   and  file_se16ncepc.exists() and file_se16nt001l.exists() and file_se16nt024.exists() and file_zmm.exists() and file_st.exists() and file_art.exists() and file_md.exists()):
                 # start=datetime.now()
-                # import_file_SE16N_T001L(conn,file_se16nt001l,year,week,uploded_by,uploded_at)
-                # import_file_MB52(conn,file_mb52,year,week,uploded_by,uploded_at)
-                # import_file_SE16N_CEPC(conn,file_se16ncepc,year,week,uploded_by,uploded_at)
-                # import_file_SE16N_T024(conn,file_se16nt024,year,week,uploded_by,uploded_at)
+                import_file_SE16N_T001L(conn,file_se16nt001l,year,week,uploded_by,uploded_at)
+                import_file_MB52(conn,file_mb52,year,week,uploded_by,uploded_at)
+                import_file_SE16N_CEPC(conn,file_se16ncepc,year,week,uploded_by,uploded_at)
+                import_file_SE16N_T024(conn,file_se16nt024,year,week,uploded_by,uploded_at)
                 # # s=datetime.now()
-                # import_file_ART_MARA_MARC(conn,file_art,year,week,uploded_by,uploded_at)
+                import_file_ART_MARA_MARC(conn,file_art,year,week,uploded_by,uploded_at)
                 # e=datetime.now()
                 # t_mara_marc=e-s
                 # print('***Mara_marc****',t_mara_marc)
@@ -105,7 +105,7 @@ def uploaded_files(request):
                 # e=datetime.now()
                 # t_zpp=e-s
                 # print('***ZPP****',t_zpp)
-                # import_file_MDMA(conn,file_md,year,week,uploded_by,uploded_at)
+                import_file_MDMA(conn,file_md,year,week,uploded_by,uploded_at)
                 # end=datetime.now()
                 # total=end-start
                 # print('***total****',total)
@@ -153,7 +153,7 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
     df=df.groupby(['year','week','material','division','stock_type']).agg({'value_free_use':'sum'}).reset_index()
 
     print(df)
-    # df.to_excel('mb52.xlsx')
+    df.to_excel('mb52.xlsx')
     df=df.to_csv(index=False,header=None) #To convert to csv
 
     mb=StringIO()
@@ -166,11 +166,11 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
             columns=[
                'year',
                'week',
-               'uploaded_by',
-               'uploaded_at',
-               'stock_type',
+            #    'uploaded_by',
+            #    'uploaded_at',
                'material',
                'division',
+               'stock_type',
             #    'store', 
             #    'store_level_deletion_indicator',
             #    'unit',
@@ -459,27 +459,41 @@ def import_file_ZMM_CARNET_CDE_IS(con,file,year,week,username,uploaded_at):
 #function for Import file ZPP_MD_Stock
 def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
     #Read file
-    zpp = pd.read_excel(file,names=['material','plan_date','mrp_element', 'data_for_planning_element','action_message','Input_need','available_quantity','reorder_date','vendor', 'customer',]) # to read file excel
+    zpp = pd.read_excel(file,names=['material','plan_date','mrp_element','data_for_planning_element','action_message','Input_need','available_quantity','reorder_date','vendor','customer']) # to read file excel
     zpp.insert(0,'division',division,True)
-    zpp['vendor']=zpp['vendor'].fillna('not_defined')
-    df=zpp.groupby(['material','division','mrp_element','vendor']).agg({'Input_need': 'sum','available_quantity': 'sum' }).reset_index()
-
     #insert 2 column year, week
-    df.insert(0,'year',year,True)
-    df.insert(1,'week',week,True)
+    zpp.insert(0,'year',year,True)
+    zpp.insert(1,'week',week,True)
+    # zpp['vendor']=zpp['vendor'].fillna('not_defined')
+     #############################
+    #ZPP and MRP ELEMENT 
+    ##############################
+    df=zpp
+    data_mrp_element=Mrp_element.undeleted_objects.values('fr','en','take_into_account')
+    df_mrp_element=pd.DataFrame(list(data_mrp_element))
+    df_mrp_element_dict_fr=dict(zip(df_mrp_element.fr,df_mrp_element.take_into_account))
+    df['take_into_account_fr']=df['mrp_element'].map(df_mrp_element_dict_fr)
+    df_mrp_element_dict_en=dict(zip(df_mrp_element.en,df_mrp_element.take_into_account))
+    df['take_into_account_en']=df['mrp_element'].map(df_mrp_element_dict_en)
+    df=df[(df['take_into_account_en'] =='Y') |  (df['take_into_account_fr'] =='Y')]
+ 
 
+
+
+
+    df=zpp.groupby(['year','week','material','division']).agg({'Input_need': 'sum','available_quantity': 'sum'}).reset_index()
     #insert 2 column created by, created at
     df.insert(2,'uploaded_by',username,True)
     df.insert(3,'uploaded_at',uploaded_at,True)
     #Read ST 
-    data_st=Stock_transit.objects.values('year','week','num_parcel','delivery_qty','material')
+    data_st=Stock_transit.objects.values('year','week','num_parcel','delivery_qty','material','division')
     df_st=pd.DataFrame(list(data_st))
 ##############################
     # #ZPP and  ST
     ##############################
     # #Add key to DF
-    df['key']=df['year'].astype(str)+df['week'].astype(str)+df['material'].astype(str)
-    df_st['key']=df_st['year'].astype(str)+df_st['week'].astype(str)+df_st['material'].astype(str)
+    df['key']=df['year'].astype(str)+df['week'].astype(str)+df['material'].astype(str)+df['division'].astype(str)
+    df_st['key']=df_st['year'].astype(str)+df_st['week'].astype(str)+df_st['material'].astype(str)+df['division'].astype(str)
 
     # #Convert to Dict
     df_st_dict_num_parcel=dict(zip(df_st.key,df_st.num_parcel))
@@ -490,45 +504,10 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
     df['delivery_qty']=df['key'].map(df_st_dict_delivery_qty)
     #Delete Key 
     del df['key']
-    #Read Zmm
-#     data_zmm=ZMM_CARNET_CDE_IS.objects.values('year','week','material','validated_delivery_date','confirmed_quantity','purchasing_group','vendor_name','validated_delivery_date','contractual_delivery_date','division')
-#     df_zmm=pd.DataFrame(list(data_zmm))
-#   ##############################
-#     # #ZPP and  ZMM
-#     # ##############################
-#     # #Add key to DF
-#     df_zmm['key']=df_zmm['year'].astype(str)+df_zmm['week'].astype(str)+df_zmm['material'].astype(str)+df_zmm['division'].astype(str)
-#     df['key']=df['year'].astype(str)+df['week'].astype(str)+df['Article'].astype(str)+df['division'].astype(str)
-
-#     # #Convert to Dict
-#     df_zmm_dict_validated_delivery_date=dict(zip(df_zmm.key,df_zmm.validated_delivery_date))
-#     df_zmm_dict_confirmed_quantity=dict(zip(df_zmm.key,df_zmm.confirmed_quantity))
-#     df_zmm_dict_purchasing_group=dict(zip(df_zmm.key,df_zmm.purchasing_group))
-#     df_zmm_dict_vendor_name=dict(zip(df_zmm.key,df_zmm.vendor_name))
-#     # #Get data from dict using map
-#     df['validated_delivery_date']=df['key'].map(df_zmm_dict_validated_delivery_date)
-#     df['confirmed_quantity']=df['key'].map(df_zmm_dict_confirmed_quantity)
-#     df['purchasing_group']=df['key'].map(df_zmm_dict_purchasing_group)
-#     df['vendor_name']=df['key'].map(df_zmm_dict_vendor_name)
-#     #Delete key 
-#     del df['key']
-    #Read Mrp element
-    data_mrp_element=Mrp_element.undeleted_objects.values('fr','en','take_into_account')
-    df_mrp_element=pd.DataFrame(list(data_mrp_element))
- #############################
-    #ZPP and MRP ELEMENT 
-    ##############################
-    df_mrp_element_dict_fr=dict(zip(df_mrp_element.fr,df_mrp_element.take_into_account))
-    df['take_into_account_fr']=df['mrp_element'].map(df_mrp_element_dict_fr)
-    df_mrp_element_dict_en=dict(zip(df_mrp_element.en,df_mrp_element.take_into_account))
-    df['take_into_account_en']=df['mrp_element'].map(df_mrp_element_dict_en)
-    df=df[(df['take_into_account_en'] == 'Y') |  (df['take_into_account_fr'] == 'Y')]
-
     print(df)
     # df=df.head(100)
     df.to_excel('zpp.xlsx')
-    df=df.to_csv(index=False,sep=';',header=None) #To convert to csv
-    
+    df=df.to_csv(index=False,sep='|',header=None) #To convert to csv  
     ZPP=StringIO()
     ZPP.write(df)
     ZPP.seek(0)
@@ -544,28 +523,28 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
                 'material',
                 'division',
                 # 'plan_date',
-                'mrp_element', 
+                # 'mrp_element', 
                 # 'data_for_planning_element',
                 # 'action_message',	
-                'vendor', 	
+                # 'vendor', 	
                 'Input_need',
                 'available_quantity',
                 # 'reorder_date',
                 # 'customer',
                 'num_parcel',
                 'delivery_qty',
-                'take_into_account_fr',
-                'take_into_account_en',
+                # 'take_into_account_fr',
+                # 'take_into_account_en',
             ],
             null='',
-            sep=';'
+            sep='|'
         )
     con.commit() 
 
 #function for Import file 
 def import_file_Stock_transit(con,file,year,week,username,uploaded_at):
       #Read file
-    df = pd.read_excel(file,names=['pExp','taken_plant','transfer_code', 'poscde','tLvr','actual_sm','delivery','item','num_picking_UUID', 'num_parcel','material', 'delivery_qty','uq','qty_delivered','qty_received','not_received','customer_order', 'of_art_description','msn',	'appro_Special','comment','n_of','article_of' ]) # to read file excel
+    df = pd.read_excel(file,names=['pExp','division','transfer_code', 'poscde','tLvr','actual_sm','delivery','item','num_picking_UUID', 'num_parcel','material', 'delivery_qty','uq','qty_delivered','qty_received','not_received','customer_order', 'of_art_description','msn',	'appro_Special','comment','n_of','article_of' ]) # to read file excel
     #insert 2 column year, week
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
@@ -589,7 +568,7 @@ def import_file_Stock_transit(con,file,year,week,username,uploaded_at):
                'uploaded_by',
                'uploaded_at',
                'pExp',
-               'taken_plant',
+               'division',
                'transfer_code', 
                'poscde',
                'tLvr',	
@@ -932,8 +911,8 @@ def save_core_history(request,pk):
 #overview
 def overview(request):
     #Call all files
-    data_zpp=ZPP_MD_Stock.objects.values('year','week','material','vendor','mrp_element','Input_need','available_quantity','division','num_parcel','delivery_qty','take_into_account_fr','take_into_account_en')
-    data_mb52=MB52.objects.values('year','week','value_free_use','material','division','store','stock_type','descr_of_storage_loc')
+    data_zpp=ZPP_MD_Stock.objects.values('year','week','material','Input_need','available_quantity','division','num_parcel','delivery_qty')
+    data_mb52=MB52.objects.values('year','week','value_free_use','material','division','stock_type')
     data_mara_marc=ART_MARA_MARC.objects.values('year','week','tyar','mp','gac','a_s','typ','ctrpr','dpr','material','division','scope_allocation','district','profit_center_designation','purchasing_group_designation')
     data_mdma=MDMA.objects.values('year','week','forecast_delivery_time','planning_unit','material','division')
     #Convert to data frame
@@ -944,24 +923,31 @@ def overview(request):
    #############################
     #ZPP and MB52
     # ##############################
-    
     df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
     df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
     # #Convert to dict
-    df_mb52_dict_value_free_use=dict(zip(df_mb52.key,df_mb52.value_free_use))
-    df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict_value_free_use)
+    # df_mb52_dict_stock_type=dict(zip(df_mb52.key,df_mb52.stock_type))
+    # df_zpp['stock_type']=df_zpp['key'].map(df_mb52_dict_stock_type)
+    df_mb52['stock_type']=df_mb52['stock_type'].fillna('not_defined')
+    df_mb52=df_mb52.pivot(index=['year','week','material','division'],columns=['stock_type'],values='value_free_use').reset_index()
+    df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
+    df_mb52_dict_other_stocks=dict(zip(df_mb52.key,df_mb52.other_stocks))
+    df_mb52_dict_stock_quality=dict(zip(df_mb52.key,df_mb52.stock_quality))
+    df_mb52_dict_stock_zpush=dict(zip(df_mb52.key,df_mb52.stock_zpush))
+    df_mb52_dict_warehouse_stock=dict(zip(df_mb52.key,df_mb52.warehouse_stock))
+    df_mb52_dict_workshop_stock=dict(zip(df_mb52.key,df_mb52.workshop_stock))
 
-    
-    # df_mb52_dict_descr_of_storage_loc=dict(zip(df_mb52.key,df_mb52.descr_of_storage_loc))
-    # # print(df_mb52_dict_descr_of_storage_loc)
-    # df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict_descr_of_storage_loc)
+    df_zpp['other_stocks']=df_zpp['key'].map(df_mb52_dict_other_stocks)
+    df_zpp['stock_quality']=df_zpp['key'].map(df_mb52_dict_stock_quality)
+    df_zpp['stock_zpush']=df_zpp['key'].map(df_mb52_dict_stock_zpush)
+    df_zpp['warehouse_stock']=df_zpp['key'].map(df_mb52_dict_warehouse_stock)
+    df_zpp['workshop_stock']=df_zpp['key'].map(df_mb52_dict_workshop_stock)
     print(df_zpp)
-    
+    # Delete Key 
+    del df_zpp['key']
+    del df_mb52['key']
 
-
-
-
-
+ 
 
     ##############################
     #MARA MARC and  MDMA
