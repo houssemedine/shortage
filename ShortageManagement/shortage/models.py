@@ -209,6 +209,7 @@ class ZPP_MD_Stock(models.Model): #Model For File ZPP_MD_Stock
     # customer=models.CharField(max_length=30,null=True)#Client
     num_parcel=models.CharField(max_length=30,null=True) #col from ST 
     delivery_qty=models.FloatField(null=True)#Col from ST
+    need_past=models.FloatField(null=True)
     # take_into_account_fr=models.CharField(max_length=15,null=True)
     # take_into_account_en=models.CharField(max_length=15,null=True)
 

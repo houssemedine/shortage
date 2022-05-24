@@ -15,7 +15,7 @@ def files_list(request):
 
 def file_details(request,namefile):
     Model=apps.get_model('shortage',namefile) #to get model from shortage
-    data=Model.objects.values('year','week','uploaded_by','uploaded_at').distinct()
+    data=Model.objects.values('year','week').distinct()
     return render(request,r'administration\file_details.html',{'data':data,'namefile':namefile})
 
 def delete_file(request,week,year,namefile):#To delete file
