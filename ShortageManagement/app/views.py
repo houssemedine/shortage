@@ -53,7 +53,7 @@ def home(request):
 #function for import file MB52
 def import_file_MB52():
     #connection to DB 
-    conn= psycopg2.connect(host='localhost', dbname='shortagemanquant_db', user='postgres', password='sahar',port='5432')
+    conn= psycopg2.connect(host='localhost', dbname='shortagemanquant_db', user='postgres', password='054Ibiza',port='5432')
     #Read file
     file=r'C:\Users\bibas\OneDrive\Bureau\PFE\inputSAP\MB52.xlsx'
     df = pd.read_excel(file) # to read file excel

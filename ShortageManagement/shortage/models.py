@@ -193,23 +193,24 @@ class ZMM_CARNET_CDE_IS(models.Model): #Model For File  ZMM_CARNET_CDE_IS
 
 class ZPP_MD_Stock(models.Model): #Model For File ZPP_MD_Stock
     year=models.IntegerField(null=True)
+    week_number=models.IntegerField(null=True)
     week=models.IntegerField(null=True)
     uploaded_by=models.IntegerField(null=True)
     uploaded_at=models.DateTimeField(null=True)
     division = models.IntegerField(null=True) #Division
     material = models.CharField(max_length=30,null=True) #article	
-    # plan_date=models.DateTimeField(null=True)#Dates 
+    plan_date=models.DateTimeField(null=True)#Dates 
     # mrp_element = models.CharField(max_length=30,null=True)#Elément MRP
     # data_for_planning_element= models.CharField(max_length=30,null=True)#Données pr élément planif
     # action_message= models.CharField(max_length=30,null=True)#Message d'action
     Input_need=models.CharField(max_length=30,null=True)#Entrée / besoin
-    available_quantity= models.CharField(max_length=30,null=True)#Quantité disponible
+    # available_quantity= models.CharField(max_length=30,null=True)#Quantité disponible
     # reorder_date=models.DateTimeField(null=True)#Date réordonnanc.
     # vendor=models.CharField(max_length=30,null=True)#Fournisseur
     # customer=models.CharField(max_length=30,null=True)#Client
-    num_parcel=models.CharField(max_length=30,null=True) #col from ST 
-    delivery_qty=models.FloatField(null=True)#Col from ST
-    need_past=models.FloatField(null=True)
+    # num_parcel=models.CharField(max_length=30,null=True) #col from ST 
+    # delivery_qty=models.FloatField(null=True)#Col from ST
+    # need_past=models.FloatField(null=True)
     # take_into_account_fr=models.CharField(max_length=15,null=True)
     # take_into_account_en=models.CharField(max_length=15,null=True)
 
