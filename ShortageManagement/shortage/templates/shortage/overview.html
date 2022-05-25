@@ -67,6 +67,8 @@
                                       <th scope="col">Scope Allocation</th>
                                       <th scope="col">Allocated Supplier</th>
                                       <th scope="col">Core Id</th>
+                                      <th scope="col">Core Status</th>
+
                                       <th scope="col">Missig Status</th>
                                       <th scope="col">Action</th>
                                       <th scope="col">View all</th>
@@ -83,12 +85,13 @@
                                           <td>{{data.purchasing_group_designation}}</td>
                                           <td>{{data.scope_allocation}}</td>
                                           <td>{{data.vendor}}</td>
-                                          <td></td>
-                                          <td></td>
+                                          <td>{{data.id_core}}</td>
+                                          <td>{{data.status_core}}</td>
+                                          <td></td>  
                                           <td></td>                                          
+
                                           <td>
                                             <button type="button" class="btn btn-primary-outline" 
-                                            {% comment %} data-id='{{data.id}}'   {% endcomment %}
                                             data-dpr='{{data.dpr}}'  
                                             data-tyar='{{data.tyar}}'
                                             data-mp='{{data.mp}}'
@@ -97,6 +100,13 @@
                                             data-mrp_element='{{data.mrp_element}}'
                                             data-delivery_qty='{{data.delivery_qty}}'
                                             data-num_parcel='{{data.num_parcel}}'
+                                            data-warehouse_stock='{{data.warehouse_stock}}'
+                                            data-workshop_stock='{{data.workshop_stock}}'
+                                            data-stock_zpush='{{data.stock_zpush}}'
+                                            data-stock_quality='{{data.stock_quality}}'
+                                            data-other_stocks='{{data.other_stocks}}'
+                                            data-ongoing_po='{{data.ongoing_po}}'
+
                                             {% comment %} data-validated_delivery_date='{{data.validated_delivery_date}}'
                                              {% endcomment %}
                                             {% comment %} data-confirmed_quantity='{{data.confirmed_quantity}}' {% endcomment %}
@@ -138,17 +148,12 @@
                         <th scope="col">Lot QM</th>
                         <th scope="col">Stock in transit</th>
                         <th scope="col">Package number</th>
-                        {% comment %} <th scope="col">Warehouse Stock</th>
+                        <th scope="col">Warehouse Stock</th>
                         <th scope="col">Workshop Stock</th>
                         <th scope="col">Stock ZPush</th>
                         <th scope="col">Stock Quality</th>
-                        <th scope="col">Other Stocks</th>
-                        <th scope="col">Stock in supply division</th>
-                        <th scope="col">CORE ID</th>
-                        <th scope="col">CORE Status</th>
-                        <th scope="col">CORE Creation</th>
-                        <th scope="col">CORE Comment</th>
-                        <th scope="col">Ongoing PO</th> {% endcomment %}
+                        <th scope="col">Other Stocks</th>             
+                        <th scope="col">Ongoing PO</th>
                         {% comment %} <th scope="col">Confirmed delivery date</th> {% endcomment %}
                         {% comment %} <th scope="col">Quantity to receive</th> {% endcomment %}
                         {% comment %} <th scope="col">Procurement agent</th> {% endcomment %}
@@ -190,10 +195,17 @@
       var mrp_element = $(event.relatedTarget).data('mrp_element');
       var delivery_qty = $(event.relatedTarget).data('delivery_qty');
       var num_parcel  = $(event.relatedTarget).data('num_parcel'); 
+      var warehouse_stock  = $(event.relatedTarget).data('warehouse_stock'); 
+      var workshop_stock  = $(event.relatedTarget).data('workshop_stock'); 
+      var stock_zpush  = $(event.relatedTarget).data('stock_zpush'); 
+      var stock_quality  = $(event.relatedTarget).data('stock_quality'); 
+      var other_stocks  = $(event.relatedTarget).data('other_stocks'); 
+      
+
       {% comment %} var validated_delivery_date  = $(event.relatedTarget).data('validated_delivery_date'); {% endcomment %}
       {% comment %} var confirmed_quantity  = $(event.relatedTarget).data('confirmed_quantity '); {% endcomment %}
       {% comment %} var vendor_name  = $(event.relatedTarget).data('vendor_name '); {% endcomment %}
-      document.getElementById("datatable").innerHTML="<td>"+dpr+"</td><td>"+tyar+"</td><td>"+mp+"</td><td>"+a_s+"</td><td>"+typ+"</td><td>"+mrp_element+"</td><td>"+delivery_qty+"</td><td>"+num_parcel+"</td>";
+      document.getElementById("datatable").innerHTML="<td>"+dpr+"</td><td>"+tyar+"</td><td>"+mp+"</td><td>"+a_s+"</td><td>"+typ+"</td><td>"+mrp_element+"</td><td>"+delivery_qty+"</td><td>"+num_parcel+"</td><td>"+warehouse_stock+"</td><td>"+workshop_stock+"</td><td>"+stock_zpush+"</td><td>"+stock_quality+"</td><td>"+other_stocks+"</td>";
       
     });
   
