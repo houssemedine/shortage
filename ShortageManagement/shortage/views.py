@@ -454,6 +454,10 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
     df.insert(2,'week_number',df['plan_date'].dt.isocalendar().week,True) #Week Number based on plan date
+    df.insert(3,'year_number',df['plan_date'].dt.isocalendar().year,True) #Year Number based on plan date
+    df.insert(4,'year_week',df['year_number'].astype(str)+'_'+df['week_number'].astype(str))
+    df.insert(5,'uploaded_by',username,True)
+    df.insert(6,'uploaded_at',uploaded_at,True)
     #############################
     #ZPP and MRP ELEMENT 
     ##############################
@@ -474,11 +478,10 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
         del df['reorder_date'] 
         del df['vendor']
         del df['customer']
+        del df['week_number']
+        del df['year_number']
 
     # df=df.groupby(['year','week','material','division']).agg({'Input_need': 'sum','available_quantity': 'sum'}).reset_index()
-    #insert 2 column created by, created at
-    df.insert(3,'uploaded_by',username,True)
-    df.insert(4,'uploaded_at',uploaded_at,True)
 
     #Get History data for need past calculte 
     # data_history=ZPP_MD_Stock.objects.values('material','division','Input_need').exclude(week=week)
@@ -505,7 +508,7 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
             columns=[
                 'year',
                 'week',
-                'week_number',
+                'year_week',
                 'uploaded_by',
                 'uploaded_at',
                 'division',
@@ -887,8 +890,13 @@ def save_core_history(request,pk):
 
 #overview
 def overview(request):
+    # year=datetime.now().isocalendar()[0]
+    # week=datetime.now().isocalendar()[1]
+    year=2022
+    week=9
+
     #Call all files
-    data_zpp=ZPP_MD_Stock.objects.values('year','week','week_number','material','Input_need','division')
+    data_zpp=ZPP_MD_Stock.objects.values('year','week','year_week','material','Input_need','division')
     data_mb52=MB52.objects.values('year','week','value_free_use','material','division','stock_type')
     data_mara_marc=ART_MARA_MARC.objects.values('year','week','tyar','mp','gac','a_s','typ','ctrpr','dpr','material','division','scope_allocation','district','profit_center_designation','purchasing_group_designation')
     data_mdma=MDMA.objects.values('year','week','forecast_delivery_time','planning_unit','material','division')
@@ -904,11 +912,15 @@ def overview(request):
     df_mara_marc=pd.DataFrame(list(data_mara_marc))
     df_mdma=pd.DataFrame(list(data_mdma))
     df_zpp['Input_need']=df_zpp['Input_need'].astype(np.float64)
-    df_zpp=df_zpp.pivot_table(index=['year','week','material','division'],columns='week_number',values='Input_need', aggfunc='sum').reset_index()
-    # df_zpp.to_excel('zpp_pivot_rable.xlsx')
+    ##############################
+    # Zpp Pivot table 
+    ##############################
+
+    df_zpp=df_zpp.pivot_table(index=['year','week','material','division'],columns='year_week',values='Input_need', aggfunc='sum').reset_index()
+
 
     ##############################
-    # #ZPP and  ST
+    # ZPP and  ST
     ##############################
     # #Add key to DF
     df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
@@ -943,6 +955,20 @@ def overview(request):
     df_zpp['stock_zpush']=df_zpp['key'].map(df_mb52_dict_stock_zpush)
     df_zpp['warehouse_stock']=df_zpp['key'].map(df_mb52_dict_warehouse_stock)
     df_zpp['workshop_stock']=df_zpp['key'].map(df_mb52_dict_workshop_stock)
+    ##################################################
+    # Calculate Needs in the past of the current week
+    ##################################################
+    #Get index for current week
+    # index_current_week=df_zpp.columns.get_loc(str(year)+'_'+str(week))
+    index_current_week=df_zpp.columns.get_loc(str(year)+'_'+str(week)) #temporarily, to delete 
+    index_first_col=df_zpp.columns.get_loc('division')
+    df_zpp['needs_in_past'+'_'+str(year)+'_'+str(week)]=df_zpp.iloc[:,index_first_col+1:index_current_week].sum(axis=1)
+    ####################################
+    # Calculate Stock of the current week
+    ####################################
+    col_list_to_sum=[str(year)+'_'+str(week),'delivery_qty','needs_in_past'+'_'+str(year)+'_'+str(week),'warehouse_stock','workshop_stock','stock_zpush','other_stocks']
+    df_zpp['stock'+'_'+str(year)+'_'+str(week)]=df_zpp[col_list_to_sum].sum(axis=1)
+
     # df_zpp['stock_current_week']=df_zpp['need_past']+df_zpp['warehouse_stock']+df_zpp['delivery_qty']+df_zpp['workshop_stock']+df_zpp['stock_zpush']+df_zpp['other_stocks']+df_zpp['Input_need']
     # df_zpp['stock_week+1']=df_zpp['stock_current_week']
     # Delete Key 
@@ -982,23 +1008,7 @@ def overview(request):
     df_zpp['procurement_agent']=df_zpp['key'].map(df_zmm_dict_purchasing_group)
     df_zpp['po_supplier']=df_zpp['key'].map(df_zmm_dict_vendor_name)
 
-    df_zpp.to_excel('zpp_last_one.xlsx')
-
-    df_zpp.to_excel('zpp.xlsx')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # df_zpp.to_excel('zpp_last_one.xlsx')
 
 
     ##############################

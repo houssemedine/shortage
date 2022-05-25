@@ -193,7 +193,7 @@ class ZMM_CARNET_CDE_IS(models.Model): #Model For File  ZMM_CARNET_CDE_IS
 
 class ZPP_MD_Stock(models.Model): #Model For File ZPP_MD_Stock
     year=models.IntegerField(null=True)
-    week_number=models.IntegerField(null=True)
+    year_week=models.CharField(max_length=30,null=True)
     week=models.IntegerField(null=True)
     uploaded_by=models.IntegerField(null=True)
     uploaded_at=models.DateTimeField(null=True)
