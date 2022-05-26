@@ -3,19 +3,19 @@
         <div class="card-tools" style="margin-right: -0.8rem;" >
             <li class="list-group-item" style="padding:7px;"><button type="button" class="btn btn-tool" data-card-widget="maximize" style="padding:3px;padding-top: 0px;"><i class="fas fa-expand"></button></i></li>
         </div>
-        <h5 class="m-0">SAP Coverage weekly evolution</h5>
+        <h5 class="m-0">SAP Coverage week</h5>
     </div>
     <div class="card-body">
         <canvas id="covred_per_week" ></canvas>
 
         <script>
-            var xValues = ['2022_8','2022_9','2022_10','2022_11'];
-            var data = [0.6,0.4,0.2,0.3];
+            var labels_value = [{% for index,data in status_week.iterrows %} '{{data.missing_status}}', {%endfor%}];
+            var data = [{% for index,data in status_week.iterrows %} {{data.id}}, {%endfor%}];
             
             const covred_per_week=new Chart("covred_per_week", {
                 type: "bar",
                 data: {
-                        labels: xValues,
+                        labels: labels_value,
                         datasets: [
                             {
                             label:'Coverage',
@@ -34,10 +34,10 @@
                                 clamp: true,
                                 color: 'black',
                                 // Format to % 
-                                formatter: (value, ctx) => {
-                                let percentage = (value*100).toFixed(2)+"%";
-                                return percentage;
-                            },
+                            //     formatter: (value, ctx) => {
+                            //     let percentage = (value*100).toFixed(2)+"%";
+                            //     return percentage;
+                            // },
                             },
                             legend: {
                             display: false,
@@ -55,19 +55,19 @@
                             },
                             
                         },
-                        scales: {
-                            y: {
-                                max:1,
+                        // scales: {
+                        //     y: {
+                        //         max:1,
                                 
-                                ticks: {
-                                    format: {
-                                        style: 'percent',
-                                    },
-                                    beginAtZero: true,
-                                    max:100
-                                }
-                            }
-                        },
+                        //         ticks: {
+                        //             format: {
+                        //                 style: 'percent',
+                        //             },
+                        //             beginAtZero: true,
+                        //             max:100
+                        //         }
+                        //     }
+                        // },
                         responsive: true,
                         maintainAspectRatio:false, 
                 }

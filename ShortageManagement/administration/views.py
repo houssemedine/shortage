@@ -109,7 +109,6 @@ def apro_spec(request): #function  for read appro spec
 
 def create_apro_spec(request): #function for creaate appro spec
      if  (request.method == 'POST') :
-        print('im here')
         appro_type=request.POST['appro_type']
         data=Apro_spec.undeleted_objects.all().filter(appro_type=appro_type)
         print(data.first())

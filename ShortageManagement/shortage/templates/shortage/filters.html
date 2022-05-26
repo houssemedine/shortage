@@ -4,7 +4,7 @@
             <h5 class="m-0">Division</h5>
         </div>
         <ul class="ks-cboxtags">
-            {% for site,division in divisions.items%}
+            {% for site,division in divisions_filter.items%}
                 <li>
                     <input type="checkbox" id="{{division}}" value="Order one">
                     <label for="{{division}}">{{division}} </label>

@@ -12,11 +12,6 @@ class Myform(forms.ModelForm):
             'created_on': forms.DateInput(format=('%m/%d/%Y'),attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
             'deleted_on': forms.DateInput(format=('%m/%d/%Y'),attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
             'updated_on': forms.DateInput(format=('%m/%d/%Y'),attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
-            'material': forms.TextInput(attrs={
-
-                # 'hx-trigger': 'keyup',
-                # 'hx-target': '#div_id_material',
-               })
         }
     def clean_material(self):
         material = self.cleaned_data['material']
@@ -29,7 +24,10 @@ class Form(forms.ModelForm):
         model = CoreHistory
         fields = '__all__'
         exclude =['core','created_on','created_by','action']
-        
+     def __init__(self, *args, **kwargs):
+        super(Form, self).__init__(*args, **kwargs)
+        self.fields['comment'].required = False
+    
 
 class Form_mrp(forms.ModelForm):
      class Meta:

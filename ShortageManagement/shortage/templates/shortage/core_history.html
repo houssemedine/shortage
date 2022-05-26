@@ -41,18 +41,24 @@
         action="{% url 'save_core_history' pk%}">
           <div >
             {% csrf_token %}
-            <div>
-                <label for="recipient-name" class="col-form-label">Status:</label>
-                <select class="custom-select" id="status" name ="status">
-                    <option value="To do" {%if core.status == 'To do'%}disabled selected {%endif%}>To do</option>
-                    <option  value="Open" {%if core.status == 'Open'%} selected {%endif%}>Open</option>
-                    <option value="Stand by" {%if core.status == 'Stand by'%} selected {%endif%}>Stand by</option>
-                    <option value="Refuse"{%if core.status == 'Refuse'%} selected {%endif%}>Refuse</option>
-                    <option value="Request" {%if core.status == 'Request'%} selected {%endif%}>Request</option>
-                    <option value="Information" {%if core.status == 'Information'%} selected {%endif%}>Information</option>
-                    <option value="Close">Close</option>
-                </select>
-            </div>
+            <label for="recipient-name" class="col-form-label">Status:</label>
+            {% for group in role%}
+            {% if 'users' in group%}
+            <input class='textinput textInput form-control' type='text'  name ='status' value={{current_status.status}} readonly>
+            {%else%}
+                <div>
+                    <select class="custom-select" id="status" name ="status">
+                        <option value="To do" {%if current_status.status == 'To do'%}disabled selected {%endif%}>To do</option>
+                        <option  value="Open" {%if current_status.status == 'Open'%} selected {%endif%}>Open</option>
+                        <option value="Stand by" {%if current_status.status == 'Stand by'%} selected {%endif%}>Stand by</option>
+                        <option value="Refuse"{%if current_status.status == 'Refuse'%} selected {%endif%}>Refuse</option>
+                        <option value="Request" {%if current_status.status == 'Request'%} selected {%endif%}>Request</option>
+                        <option value="Information" {%if current_status.status == 'Information'%} selected {%endif%}>Information</option>
+                        <option value="Close">Close</option>
+                    </select>
+                </div>
+              {%endif%}
+            {%endfor%}
             {{form|crispy}}
             <div class="d-flex justify-content-center" style='margin-bottom:10px'>
               <input type="submit" class="profile-card__button button--blue" value="Save" id ="save">

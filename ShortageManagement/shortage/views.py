@@ -1,6 +1,5 @@
 # Create your views here.
-from __future__ import division
-from inspect import CO_ASYNC_GENERATOR
+from asyncio.windows_events import NULL
 from io import StringIO
 from turtle import st
 from unittest import result
@@ -18,7 +17,7 @@ from django.db.models import Q
 from .decorators import allowed_users
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from administration.templates import administration
-
+from django.contrib.auth.models import User
 
 from shortage.models import *
 #function to upload files
@@ -832,7 +831,7 @@ def create_core(request):#create new core
 
     return render(request,'shortage\create_core.html',{'myform' : Myform})
 
-@allowed_users(allowed_roles=['administrators'])
+@allowed_users(allowed_roles=['administrators','users'])
 def update_core(request,pk): #function for update core
     core=Core.objects.get(id=pk)
     myform=Myform(instance=core)
@@ -865,16 +864,19 @@ def delete_core(request,pk): #function soft-delete
     return redirect('core')
 
 def core_history(request,pk):
+    username='bibas'
+    role=User.objects.all().filter(username=username).values_list('groups__name')
     data=CoreHistory.objects.all().filter(core_id=pk).order_by('-id')
-    core=Core.objects.get(id=pk)
-    return render(request,'shortage/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core})
+    core=Core.objects.filter(id=pk).all()
+    current_status=core.values('status').reverse()[0]
+    return render(request,'shortage/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core,'role':role,'current_status':current_status})
 
 
 def save_core_history(request,pk):
     # data=CoreHistory.objects.all().filter(core_id=pk).order_by('-id')
     core=Core.objects.get(id=pk)
     if (request.method == 'POST'):
-        core.status = request.POST['status']
+            core.status = request.POST['status']
     if core.status== 'Close':
         core.closing_date=datetime.now()
     core.save()
@@ -1116,8 +1118,10 @@ def kpi(request):
     # status_week=overview.df_zpp.groupby("missing_status")["missing_status"].count()
     status_week=overview.df_zpp.groupby("missing_status").agg({'id':'count'}).reset_index()
     status_week_per_division=overview.df_zpp.groupby(["division","missing_status"]).agg({'id':'count'}).reset_index()
-    divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
-    return render(request,'shortage/kpi.html',{'divisions':divisions,'status_week':status_week,'status_week_per_division':status_week_per_division})
+    divisions_filter={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
+    divisions={'2110','2000','2030','2020','2010','2200','2300','2400','2500','2600','2320'}
+    missing_status=['Shortage','Immidiate Shortage','Covred']
+    return render(request,'shortage/kpi.html',{'divisions_filter':divisions_filter,'divisions':divisions,'status_week':status_week,'status_week_per_division':status_week_per_division,'missing_status':missing_status})
 
 
 

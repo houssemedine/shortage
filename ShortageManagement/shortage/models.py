@@ -1,4 +1,3 @@
-from __future__ import division
 from datetime import  datetime
 from django.db import models
 
@@ -430,7 +429,6 @@ class CoreHistory(models.Model): #Model For Core history
     comment=models.TextField(null=True)
     action=models.CharField(max_length=30,null=True)
 
-# 
 class Mrp_element(Soft_delete): #Model For mrp_element
     year=models.IntegerField(null=True)
     week=models.IntegerField(null=True)
