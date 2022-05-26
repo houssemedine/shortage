@@ -979,9 +979,6 @@ def overview(request):
         col_list_for_sum=['stock'+'_'+str(year)+'_'+str(week+i-1),str(year)+'_'+str(week+i),'delivery_qty']
         df_zpp['stock'+'_'+str(year)+'_'+str(week+i)]=df_zpp[col_list_for_sum].sum(axis=1)
         i += 1
-
-    # df_zpp['stock_current_week']=df_zpp['need_past']+df_zpp['warehouse_stock']+df_zpp['delivery_qty']+df_zpp['workshop_stock']+df_zpp['stock_zpush']+df_zpp['other_stocks']+df_zpp['Input_need']
-    # df_zpp['stock_week+1']=df_zpp['stock_current_week']
     # Delete Key 
     del df_mb52['key']
     del df_zpp['key']
@@ -1018,11 +1015,7 @@ def overview(request):
     df_zpp['quantity_to_receive']=df_zpp['key'].map(df_zmm_dict_confirmed_quantity)
     df_zpp['procurement_agent']=df_zpp['key'].map(df_zmm_dict_purchasing_group)
     df_zpp['po_supplier']=df_zpp['key'].map(df_zmm_dict_vendor_name)
-
     # df_zpp.to_excel('zpp_last_one.xlsx')
-
-
-    ##############################
     #MARA MARC and  MDMA
     ##############################
     #Add  new key to DF mara_marc
@@ -1070,18 +1063,8 @@ def overview(request):
     # df_zpp['purchasing_group']=df_zpp['key'].map(df_mara_marc_dict_purchasing_group)
     # del df_zpp['key']
     df_zpp['id']=df_zpp.index
-    df_zpp.to_excel('zpp.xlsx')
     # df_mb52.to_excel('mb52.xlsx')
-    # df_mb52.to_excel('mb52.xlsx')
-    #Delete dataframe not used
-    
-  
-    # #Delete dataframe not used
-
-
-    
-
-    #Delete dataframe not used
+    # df_mb52.to_excel('mb52.xlsx' )
 
     ##############################
     #ZPP and  MB52
@@ -1098,16 +1081,20 @@ def overview(request):
     # #Get data from dict using map
     # df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict)
     # df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict)
-
-     #Delete dataframe not used
-
-    
-    # #Delete dataframe not used
-    # ##############################
-   
-    # df_zpp=df_zpp.head(10)
-    # print(df_zpp)
-    # df_zpp.to_csv(r'C:\Users\bibas\Downloads\zpp.csv',index=False)
+    ##############################
+    #calcul missing status
+    ##############################
+    list_futur_week=list(range(week+1,week+futur_week))
+    df_zpp.insert(0,'missing_status',None,True)
+    for first_week, successive_week in zip(list_futur_week, list_futur_week[1:]):
+        df_zpp['missing_status']=np.where((df_zpp.missing_status.isna()) & (df_zpp['stock'+'_'+str(year)+'_'+str(first_week)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(successive_week)] < 0),'Shortage',df_zpp['missing_status'])
+    #Immidiate Shortage
+    df_zpp['missing_status']=np.where((df_zpp['stock'+'_'+str(year)+'_'+str(week+1)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+2)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+3)] < 0),'Immidiate Shortage',df_zpp['missing_status'])
+    df_zpp['missing_status']=np.where((df_zpp['stock'+'_'+str(year)+'_'+str(week+1)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+2)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+3)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+4)] < 0),'Heavy shortage',df_zpp['missing_status'])
+    df_zpp['missing_status']=df_zpp['missing_status'].fillna('Covred')
+    ##############################
+    # df_zpp.to_excel('zpp.xlsx')
+    overview.df_zpp=df_zpp
     #Pagination
     #Convert  DataFrame to Dic
     records=df_zpp.to_dict(orient='records')
@@ -1122,8 +1109,15 @@ def overview(request):
 
     return render(request,'shortage/overview.html',{'records':records})
 def kpi(request):
+    overview(request)
+    #################
+    # KPIs
+    #################
+    # status_week=overview.df_zpp.groupby("missing_status")["missing_status"].count()
+    status_week=overview.df_zpp.groupby("missing_status").agg({'id':'count'}).reset_index()
+    status_week_per_division=overview.df_zpp.groupby(["division","missing_status"]).agg({'id':'count'}).reset_index()
     divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
-    return render(request,'shortage/kpi.html',{'divisions':divisions})
+    return render(request,'shortage/kpi.html',{'divisions':divisions,'status_week':status_week,'status_week_per_division':status_week_per_division})
 
 
 
