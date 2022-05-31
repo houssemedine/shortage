@@ -1,5 +1,6 @@
 # Create your views here.
-from asyncio.windows_events import NULL
+from __future__ import division
+from inspect import CO_ASYNC_GENERATOR
 from io import StringIO
 from turtle import st
 from unittest import result
@@ -17,7 +18,7 @@ from django.db.models import Q
 from .decorators import allowed_users
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from administration.templates import administration
-from django.contrib.auth.models import User
+
 
 from shortage.models import *
 #function to upload files
@@ -25,15 +26,15 @@ from shortage.models import *
 
 def upload(request):
     #Delete all data before upload
-    # MB52.objects.all().delete()
-    # SE16N_CEPC.objects.all().delete()
-    # SE16N_T001L.objects.all().delete()
-    # SE16N_T024.objects.all().delete()
-    # ZMM_CARNET_CDE_IS.objects.all().delete()
-    # Stock_transit.objects.all().delete()
-    # MDMA.objects.all().delete()
-    # ART_MARA_MARC.objects.all().delete()
-    # ZPP_MD_Stock.objects.all().delete()
+    MB52.objects.all().delete()
+    SE16N_CEPC.objects.all().delete()
+    SE16N_T001L.objects.all().delete()
+    SE16N_T024.objects.all().delete()
+    ZMM_CARNET_CDE_IS.objects.all().delete()
+    Stock_transit.objects.all().delete()
+    MDMA.objects.all().delete()
+    ART_MARA_MARC.objects.all().delete()
+    ZPP_MD_Stock.objects.all().delete()
     uploaded_files(request)  #call function to upload files
     return redirect ('files_list')
 
@@ -41,41 +42,28 @@ def upload(request):
 def uploaded_files(request):
     #connection to DB 
         try:
-            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='sahar',port='5432') 
-            file_mb52=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MB52 ALL.xlsx')
-            file_se16ncepc=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\cepc.xlsx')
-            file_se16nt001l=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T001l.xlsx')
-            file_se16nt024=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\T024.xlsx')
-            file_zmm=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
-            file_st=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\stock_transit.xlsx')
-            file_art=pathlib.Path( r'C:\Users\bibas\Downloads\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
-            file_md=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\MDMA.xlsx')
+            conn= psycopg2.connect(host='localhost', dbname='latecoere_db', user='postgres', password='054Ibiza',port='5432') 
+            file_mb52=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MB52 ALL.xlsx')
+            file_se16ncepc=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\cepc.xlsx')
+            file_se16nt001l=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T001l.xlsx')
+            file_se16nt024=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\T024.xlsx')
+            file_zmm=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ZMM_CARNET_CDE_IS.xlsx')
+            file_st=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\stock_transit.xlsx')
+            file_art=pathlib.Path( r'C:\Users\L0005082\Documents\Input SAP\ART_MARA_MARC_GLOBAL_202214.xlsx')
+            file_md=pathlib.Path(r'C:\Users\L0005082\Documents\Input SAP\MDMA.xlsx')
             zpp_md_stock={
-                "2500":r"C:\Users\bibas\Downloads\Input SAP\BEL MD STOCK.xlsx",
-                "2600":r"C:\Users\bibas\Downloads\Input SAP\CAN MD STOCK.xlsx",
-                "2400":r"C:\Users\bibas\Downloads\Input SAP\CAS MD STOCK.xlsx",
-                "2010":r"C:\Users\bibas\Downloads\Input SAP\COL MD STOCK.xlsx",
-                "2110":r"C:\Users\bibas\Downloads\Input SAP\FOU MD STOCK.xlsx",
-                "2200":r"C:\Users\bibas\Downloads\Input SAP\HBG MD STOCK.xlsx",
-                "2000":r"C:\Users\bibas\Downloads\Input SAP\LAB MD STOCK.xlsx",
-                "2030":r"C:\Users\bibas\Downloads\Input SAP\LEC MD STOCK.xlsx",
-                "2020":r"C:\Users\bibas\Downloads\Input SAP\LIP MD STOCK.xlsx",
-                "2300":r"C:\Users\bibas\Downloads\Input SAP\MEX MD STOCK.xlsx"
-            } 
-            # zpp_md_stock=[
-            #     r"C:\Users\bibas\Downloads\Input SAP\2000_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2010_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2020_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2030_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2040_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2110_ZPP_MD_STOCK.xlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2200_ZPP_MD_STOCKxlsx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2300_ZPP_MD_STOCK.xslx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2400_ZPP_MD_STOCK.xslx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2500_ZPP_MD_STOCK.xslx"
-            #     r"C:\Users\bibas\Downloads\Input SAP\2600_ZPP_MD_STOCK.xslx"
-            # ]
-
+                "2500":r"C:\Users\L0005082\Documents\Input SAP\2500_ZPP_MD_STOCK.xlsx",
+                "2600":r"C:\Users\L0005082\Documents\Input SAP\2600_ZPP_MD_STOCK.xlsx",
+                "2400":r"C:\Users\L0005082\Documents\Input SAP\2400_ZPP_MD_STOCK.xlsx",
+                "2010":r"C:\Users\L0005082\Documents\Input SAP\2010_ZPP_MD_STOCK.xlsx",
+                "2110":r"C:\Users\L0005082\Documents\Input SAP\2110_ZPP_MD_STOCK.xlsx",
+                "2200":r"C:\Users\L0005082\Documents\Input SAP\2200_ZPP_MD_STOCK.xlsx",
+                "2000":r"C:\Users\L0005082\Documents\Input SAP\2000_ZPP_MD_STOCK.xlsx",
+                "2030":r"C:\Users\L0005082\Documents\Input SAP\2030_ZPP_MD_STOCK.xlsx",
+                "2020":r"C:\Users\L0005082\Documents\Input SAP\2020_ZPP_MD_STOCK.xlsx",
+                "2300":r"C:\Users\L0005082\Documents\Input SAP\2300_ZPP_MD_STOCK.xlsx",
+                "2040":r"C:\Users\L0005082\Documents\Input SAP\2040_ZPP_MD_STOCK.xlsx",
+            }
 
             #User name
             uploded_by =1
@@ -106,6 +94,8 @@ def uploaded_files(request):
 def import_file_MB52(con,file,year,week,username,uploaded_at):
     #Read file
     df = pd.read_excel(file,names=['material','division','store','store_level_deletion_indicator','unit','for_free_use','currency','value_free_use','transit_transfer','transit_transfer_value', 'in_quality_control','value_quality_control', 'non_free_stock','non_free_value', 'blocked','blocked_stock_value','returns','blocked_return_stock_value',]) # to read file excel
+    #Filter where suppr_indicator is not X
+    df=df[df['suppr_indicator'] != 'X']
     #insert 2 column year, week
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
@@ -120,7 +110,7 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
     #read t001L
     data_tl001l=SE16N_T001L.objects.values('year','week','descr_of_storage_loc','division','store')
     df_tl001l=pd.DataFrame(list(data_tl001l))
-     #MB52 and T001L
+    #MB52 and T001L
     ##############################
     #Add Key to DF
     df['key']=df['year'].astype(str)+df['week'].astype(str)+df['division'].astype(str)+df['store'].astype(str)
@@ -129,21 +119,16 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
     df_tl001l_dict=dict(zip(df_tl001l.key,df_tl001l.descr_of_storage_loc))
     # #Get data from dict using map
     df['descr_of_storage_loc']=df['key'].map(df_tl001l_dict)
-    df.insert(4,'stock_type',"",True)
+    df.insert(4,'stock_type',"other_stocks",True)
     df.loc[( df.descr_of_storage_loc.str.contains("PRINC")) | (df.descr_of_storage_loc.str.contains("MAIN"))  , "stock_type"] = "warehouse_stock"
     df.loc[( df.descr_of_storage_loc.str.contains("BDL") ) | (df.descr_of_storage_loc.str.contains("PROD")) | (df.descr_of_storage_loc.str.contains("PRD")) | (df.descr_of_storage_loc.str.contains("LS"))| (df.descr_of_storage_loc.str.contains("SEMI")) , "stock_type"] = "workshop_stock"
     df.loc[( df.descr_of_storage_loc.str.contains("PUSH") ) | (df.descr_of_storage_loc.str.contains("FTWZ")) , "stock_type"] = "stock_zpush"
     df.loc[( df.descr_of_storage_loc.str.contains("QUAL") ) | (df.descr_of_storage_loc.str.contains("QT")) | (df.descr_of_storage_loc.str.contains("QLt")) | (df.descr_of_storage_loc.str.contains("QLT")) , "stock_type"] = "stock_quality"
-    df.loc[( df.descr_of_storage_loc.isna() ), "stock_type"] = "other_stocks"
+    # df.loc[( df.descr_of_storage_loc.isna() ), "stock_type"] = "other_stocks"
     # Delete Key 
     del df['key'] 
-    # print(df)
     df=df.groupby(['year','week','material','division','stock_type']).agg({'value_free_use':'sum'}).reset_index()
-
-    print(df)
-    df.to_excel('mb52.xlsx')
     df=df.to_csv(index=False,header=None) #To convert to csv
-
     mb=StringIO()
     mb.write(df)
     mb.seek(0)
@@ -182,7 +167,6 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
             sep=','
         )
     con.commit()
- 
 #function for Import file SE16N_CEPC
 def import_file_SE16N_CEPC(con,file,year,week,username,uploaded_at):
         #Read file
@@ -578,6 +562,7 @@ def import_file_Stock_transit(con,file,year,week,username,uploaded_at):
 def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
     #Read file
     df = pd.read_excel(file,names=['material','material_designation','text_material', 'market_group','division','ctrpr','typ_app','a_s','tcy','dfi', 'dpr','horiz', 'mp','r', 'tyar','nai','i_c','aappr_def','mgApp','mag','tl','fixed_batch','uq1','security_stock', 'uq2','tre','gest','di','scrap','gac','profile', 'prpiat','created_by', 'language','created_on', 'gcha','gs','comparison_mode_of_the_requirements','int_adjustment_upstream','int_adjustment_downstream','size_l_min', 'uq3','rounded_value','uq4','lot_size_mx','uq5','maximum_stock','uq6', 'edge','typ', 'time_limit1','time_limit2', 'recipient_ctrl','material_filled','dv',	'gml','grpi','abc','uq7','wbs_element','grpa','control_code','product_hierarchy', 'gross_weight','unp1', 'net_weight','unp2', 'no_ccr','ccr_lot_size','uq8']) # to read file excel
+
     #insert 2 column year, week
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
@@ -591,9 +576,9 @@ def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
     ##############################
     #MARA MARC and  CEPC
     ##############################
-    #Add  new key to DF mara_marc
+    #Key MARA MARC
     df['key']=df['year'].astype(str)+df['week'].astype(str)+df['ctrpr'].astype(str)
-    #Add key to DF
+    #KEY CEPC
     df_cepc['key']=df_cepc['year'].astype(str)+df_cepc['week'].astype(str)+df_cepc['profit_center'].astype(str)
     #Convert to Dict
     df_cepc_dict_district=dict(zip(df_cepc.key,df_cepc.district)) 
@@ -610,14 +595,15 @@ def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
     df['profit_center_designation']=df['key'].map(df_cepc_dict_profit_center_short_text_for_matchcode)
     #Delete key 
     del df['key']
-    #read T024
+    #Read T024
     data_t024=SE16N_T024.objects.values('year','week','purchasing_group','description_p_group')
     df_t024=pd.DataFrame(list(data_t024))
     #############################
     #MARA MARC and T024
     #############################
-    #Add key to DF
+    #Key MARA MARC
     df['key']=df['year'].astype(str)+df['week'].astype(str)+df['gac'].astype(str)
+    #Key SE16N_T024
     df_t024['key']=df_t024['year'].astype(str)+df_t024['week'].astype(str)+df_t024['purchasing_group'].astype(str)
     #Convert to Dict
     df_t024_dict=dict(zip(df_t024.key,df_t024.description_p_group))    
@@ -625,9 +611,7 @@ def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
     df['purchasing_group_designation']=df['key'].map(df_t024_dict)
     #Delete key 
     del df['key']
-    # df=df.head(20)
-    print(df)
-    # df.to_excel('mara_marc.xlsx')
+
     df=df.to_csv(index=False,header=None,sep=';') #To convert to csv
     
     art=StringIO()
@@ -725,7 +709,7 @@ def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
 #function for import file MDMA
 def import_file_MDMA(con,file,year,week,username,uploaded_at):
     #Read file
-    df = pd.read_excel(file,names=['material','planning_unit','division', 'planning_profile','planning_type','manager','planning_group','order_point','planning_rate','fixed_planning_horizon', 'lot_size_calculation_key','rounding_profile', 'rounding_value','minimum_lot_size', 'maximum_lot_size','maximum_stock','cycle',	'rejects_ss_ens','special_supply','production_store','store_for_external_supply','planning_calendar','safety_stock','coverage_profile', 'safety_stock_actual_stock','fixed_lot_size','fixed_lot_costs',	'storage_cost_code','service_rate','forecast_profile','ref_cons_val', 'un_plan_cons','au', 'multiplier',	'suppr_indicator', 'prof_per_sec','dependent_needs_planner','reset_auto','management_status','correction_pow','safety_time', 'for_apo','forecast_delivery_time','take_into_account_the_expected_delivery_time']) # to read file excel
+    df = pd.read_excel(file,names=['material','planning_unit','division', 'planning_profile','planning_type','manager','planning_group','order_point','planning_rate','fixed_planning_horizon', 'lot_size_calculation_key','rounding_profile', 'rounding_value','minimum_lot_size', 'maximum_lot_size','maximum_stock','cycle',	'rejects_ss_ens','special_supply','production_store','store_for_external_supply','planning_calendar','safety_stock','coverage_profile', 'safety_stock_actual_stock','fixed_lot_size','fixed_lot_costs',	'storage_cost_code','service_rate','forecast_profile','ref_cons_val', 'un_plan_cons','au', 'multiplier','suppr_indicator','prof_per_sec','dependent_needs_planner','reset_auto','management_status','correction_pow','safety_time', 'for_apo','forecast_delivery_time','take_into_account_the_expected_delivery_time']) # to read file excel
     #insert 2 column year, week
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
@@ -831,7 +815,7 @@ def create_core(request):#create new core
 
     return render(request,'shortage\create_core.html',{'myform' : Myform})
 
-@allowed_users(allowed_roles=['administrators','users'])
+@allowed_users(allowed_roles=['administrators'])
 def update_core(request,pk): #function for update core
     core=Core.objects.get(id=pk)
     myform=Myform(instance=core)
@@ -864,19 +848,16 @@ def delete_core(request,pk): #function soft-delete
     return redirect('core')
 
 def core_history(request,pk):
-    username='bibas'
-    role=User.objects.all().filter(username=username).values_list('groups__name')
     data=CoreHistory.objects.all().filter(core_id=pk).order_by('-id')
-    core=Core.objects.filter(id=pk).all()
-    current_status=core.values('status').reverse()[0]
-    return render(request,'shortage/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core,'role':role,'current_status':current_status})
+    core=Core.objects.get(id=pk)
+    return render(request,'shortage/core_history.html',{'form':Form,'pk':pk,'data':data,'core':core})
 
 
 def save_core_history(request,pk):
     # data=CoreHistory.objects.all().filter(core_id=pk).order_by('-id')
     core=Core.objects.get(id=pk)
     if (request.method == 'POST'):
-            core.status = request.POST['status']
+        core.status = request.POST['status']
     if core.status== 'Close':
         core.closing_date=datetime.now()
     core.save()
@@ -917,10 +898,7 @@ def overview(request):
     ##############################
     # Zpp Pivot table 
     ##############################
-
     df_zpp=df_zpp.pivot_table(index=['year','week','material','division'],columns='year_week',values='Input_need', aggfunc='sum').reset_index()
-
-
     ##############################
     # ZPP and  ST
     ##############################
@@ -945,6 +923,8 @@ def overview(request):
     # df_zpp['stock_type']=df_zpp['key'].map(df_mb52_dict_stock_type)
     df_mb52['stock_type']=df_mb52['stock_type'].fillna('not_defined')
     df_mb52=df_mb52.pivot(index=['year','week','material','division'],columns=['stock_type'],values='value_free_use').reset_index()
+    # df_mb52=df_mb52.pivot_table(index=['year','week','material','division'],columns='stock_type',values='value_free_use', aggfunc='sum').reset_index()
+
     df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
     df_mb52_dict_other_stocks=dict(zip(df_mb52.key,df_mb52.other_stocks))
     df_mb52_dict_stock_quality=dict(zip(df_mb52.key,df_mb52.stock_quality))
@@ -1017,27 +997,27 @@ def overview(request):
     df_zpp['quantity_to_receive']=df_zpp['key'].map(df_zmm_dict_confirmed_quantity)
     df_zpp['procurement_agent']=df_zpp['key'].map(df_zmm_dict_purchasing_group)
     df_zpp['po_supplier']=df_zpp['key'].map(df_zmm_dict_vendor_name)
-    # df_zpp.to_excel('zpp_last_one.xlsx')
+    ##############################
     #MARA MARC and  MDMA
     ##############################
-    #Add  new key to DF mara_marc
-    df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
-    #Add key to DF
-    df_mdma['key']=df_mdma['year'].astype(str)+df_mdma['week'].astype(str)+df_mdma['material'].astype(str)+df_mdma['division'].astype(str)
-    #Convert to Dict
-    # df_mara_marc_dict=dict(zip(df_mara_marc.key, df_mara_marc.a_s))
-    df_mdma_dict_planning_unit=dict(zip(df_mdma.key,df_mdma.planning_unit)) 
+    #Key MARA MARC 
+    # df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
+    # #Key MDMA 
+    # df_mdma['key']=df_mdma['year'].astype(str)+df_mdma['week'].astype(str)+df_mdma['material'].astype(str)+df_mdma['division'].astype(str)
+    # #Convert to Dict
+    # df_mdma_dict_planning_unit=dict(zip(df_mdma.key,df_mdma.planning_unit)) 
 
-    df_mara_marc['planning_unit']=df_mara_marc['key'].map(df_mdma_dict_planning_unit)
-    df_mara_marc.a_s=df_mara_marc.a_s.fillna(0)
-    df_mara_marc.a_s=df_mara_marc.a_s.astype(str)
-    df_mara_marc['mrp_area']=np.where(df_mara_marc.a_s.str.startswith('5'),df_mara_marc['planning_unit'],'')
-     # #ZPP and  MARA MARC
+    df_mara_marc.insert(0,'mrp_area',None,True)
+    df_mara_marc['mrp_area']=np.where( ((df_mara_marc['a_s'] == '5A') | (df_mara_marc['a_s'] == '5B')) & (df_mara_marc['division'].astype(str)=='2110') ,'2000-2091',df_mara_marc['mrp_area'])
+    df_mara_marc['mrp_area']=np.where( ((df_mara_marc['a_s'] == '5A') | (df_mara_marc['a_s'] == '5B')) & (df_mara_marc['division'].astype(str)=='2400') ,'2000-2092',df_mara_marc['mrp_area'])
+    df_mara_marc['mrp_area']=np.where( ((df_mara_marc['a_s'] == '5A') | (df_mara_marc['a_s'] == '5B')) & (df_mara_marc['division'].astype(str)=='2500') ,'2000-FTWZ',df_mara_marc['mrp_area'])
+
+
+    # #ZPP and  MARA MARC
     # ##############################
-    # #Delete key 
-    del df_mara_marc['key']
-    # #Add key to DF
+    #Key MARA MARC
     df_mara_marc['key']=df_mara_marc['year'].astype(str)+df_mara_marc['week'].astype(str)+df_mara_marc['material'].astype(str)+df_mara_marc['division'].astype(str)
+    #Key ZPP
     df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
     # #Convert to Dict
     df_mara_marc_dict_tyar=dict(zip(df_mara_marc.key,df_mara_marc.tyar))
@@ -1049,8 +1029,6 @@ def overview(request):
     df_mara_marc_dict_mrp_area=dict(zip(df_mara_marc.key,df_mara_marc.mrp_area))
     df_mara_marc_dict_scope_allocation=dict(zip(df_mara_marc.key,df_mara_marc.scope_allocation))
     df_mara_marc_dict_dpr=dict(zip(df_mara_marc.key,df_mara_marc.dpr))
-    # df_mara_marc_dict=dict(zip(df_mara_marc.key,df_mara_marc.forecast_delivery_time))
-    # df_mara_marc_dict_purchasing_group=dict(zip(df_mara_marc.key,df_mara_marc.purchasing_group))
     # # #Get data from dict using map
     df_zpp['tyar']=df_zpp['key'].map(df_mara_marc_dict_tyar)
     df_zpp['mp']=df_zpp['key'].map(df_mara_marc_dict_mp)
@@ -1061,28 +1039,9 @@ def overview(request):
     df_zpp['mrp_area']=df_zpp['key'].map(df_mara_marc_dict_mrp_area)
     df_zpp['scope_allocation']=df_zpp['key'].map(df_mara_marc_dict_scope_allocation)
     df_zpp['dpr']=df_zpp['key'].map(df_mara_marc_dict_dpr)
-    # df_zpp['forecast_delivery_time']=df_zpp['key'].map(df_mara_marc_dict)
-    # df_zpp['purchasing_group']=df_zpp['key'].map(df_mara_marc_dict_purchasing_group)
     # del df_zpp['key']
     df_zpp['id']=df_zpp.index
-    # df_mb52.to_excel('mb52.xlsx')
-    # df_mb52.to_excel('mb52.xlsx' )
 
-    ##############################
-    #ZPP and  MB52
-    ##############################
-    # #Delete key
-    # del df_zpp['key'] 
-    # del df_mb52['key']
-    # #Add key to DF
-    # df_zpp['key']=df_zpp['year'].astype(str)+df_zpp['week'].astype(str)+df_zpp['material'].astype(str)+df_zpp['division'].astype(str)
-    # df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
-    # #Convert to Dict
-    # df_mb52_dict=dict(zip(df_mb52.key,df_mb52.value_free_use))
-    # df_mb52_dict=dict(zip(df_mb52.key,df_mb52.descr_of_storage_loc))
-    # #Get data from dict using map
-    # df_zpp['value_free_use']=df_zpp['key'].map(df_mb52_dict)
-    # df_zpp['descr_of_storage_loc']=df_zpp['key'].map(df_mb52_dict)
     ##############################
     #calcul missing status
     ##############################
@@ -1094,8 +1053,14 @@ def overview(request):
     df_zpp['missing_status']=np.where((df_zpp['stock'+'_'+str(year)+'_'+str(week+1)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+2)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+3)] < 0),'Immidiate Shortage',df_zpp['missing_status'])
     df_zpp['missing_status']=np.where((df_zpp['stock'+'_'+str(year)+'_'+str(week+1)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+2)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+3)] < 0) & (df_zpp['stock'+'_'+str(year)+'_'+str(week+4)] < 0),'Heavy shortage',df_zpp['missing_status'])
     df_zpp['missing_status']=df_zpp['missing_status'].fillna('Covred')
+
+
+    column_futur_week=['material']
+    for week in list_futur_week:
+        column_futur_week.append('stock_2022_'+str(week))
+    stock_futur_week=df_zpp[column_futur_week]
+
     ##############################
-    # df_zpp.to_excel('zpp.xlsx')
     overview.df_zpp=df_zpp
     #Pagination
     #Convert  DataFrame to Dic
@@ -1109,8 +1074,9 @@ def overview(request):
     #End Pagination
 
 
-    return render(request,'shortage/overview.html',{'records':records})
+    return render(request,'shortage/overview.html',{'records':records,'list_futur_week':list_futur_week,'stock_futur_week':stock_futur_week})
 def kpi(request):
+    week=9
     overview(request)
     #################
     # KPIs
@@ -1118,10 +1084,12 @@ def kpi(request):
     # status_week=overview.df_zpp.groupby("missing_status")["missing_status"].count()
     status_week=overview.df_zpp.groupby("missing_status").agg({'id':'count'}).reset_index()
     status_week_per_division=overview.df_zpp.groupby(["division","missing_status"]).agg({'id':'count'}).reset_index()
-    divisions_filter={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
-    divisions={'2110','2000','2030','2020','2010','2200','2300','2400','2500','2600','2320'}
+    # status_week_per_division=overview.df_zpp.groupby(["division","missing_status"])["missing_status"].count().unstack()
+    # divisions={'FOU-2110':'2110','LAB-2000':'2000','LEC-2030':'2030','LIP-2020':'2020','COL-2010':'2010','HBG-2200':'2200','HER-2300':'2300','CAS-2400':'2400','BEL-2500':'2500','LAV-2600':'2600','QRO-2320':'2320'}
+    divisions=['2110','2000','2030','2020','2010','2200','2300','2400','2500','2600','2320']
     missing_status=['Shortage','Immidiate Shortage','Covred']
-    return render(request,'shortage/kpi.html',{'divisions_filter':divisions_filter,'divisions':divisions,'status_week':status_week,'status_week_per_division':status_week_per_division,'missing_status':missing_status})
+
+    return render(request,'shortage/kpi.html',{'divisions':divisions,'status_week':status_week,'status_week_per_division':status_week_per_division,'missing_status':missing_status})
 
 
 

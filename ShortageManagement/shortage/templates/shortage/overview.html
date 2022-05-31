@@ -58,6 +58,7 @@
                           <table class="table table-hover table-sm table-bordered  table-responsive{-sm|-md|-lg|-xl}" style='white-space:nowrap;' id="table">
                                   <thead>
                                       <tr>
+                                      <th scope="col">View all</th>
                                       <th scope="col">ID</th>
                                       <th scope="col">Material</th>
                                       <th scope="col">Division</th>
@@ -70,12 +71,35 @@
                                       <th scope="col">Core Status</th>
                                       <th scope="col">Missig Status</th>
                                       <th scope="col">Action</th>
-                                      <th scope="col">View all</th>
                                       </tr>
                                   </thead>
                               <tbody >
                                       {% for data in records %}
                                       <tr>
+                                        <td>
+                                          <button type="button" class="btn btn-primary-outline" 
+                                          data-dpr='{{data.dpr}}'  
+                                          data-tyar='{{data.tyar}}'
+                                          data-mp='{{data.mp}}'
+                                          data-a_s='{{data.a_s}}'
+                                          data-typ='{{data.typ}}'
+                                          data-mrp_element='{{data.mrp_element}}'
+                                          data-delivery_qty='{{data.delivery_qty}}'
+                                          data-num_parcel='{{data.num_parcel}}'
+                                          data-warehouse_stock='{{data.warehouse_stock}}'
+                                          data-workshop_stock='{{data.workshop_stock}}'
+                                          data-stock_zpush='{{data.stock_zpush}}'
+                                          data-stock_quality='{{data.stock_quality}}'
+                                          data-other_stocks='{{data.other_stocks}}'
+                                          data-ongoing_po='{{data.ongoing_po}}'
+                                          {% comment %} data-validated_delivery_date='{{data.validated_delivery_date}}'
+                                           {% endcomment %}
+                                          {% comment %} data-confirmed_quantity='{{data.confirmed_quantity}}' {% endcomment %}
+                                          {% comment %} data-vendor_name='{{data.vendor_name}}' {% endcomment %}
+                                          data-toggle="modal" data-target="#viewall">
+                                            <i class="fa-regular fa-folder-open"></i>
+                                          </button>
+                                        </td>
                                           <td>{{data.id}}</td>
                                           <td>{{data.material}}</td>
                                           <td>{{data.division}}</td>
@@ -88,32 +112,6 @@
                                           <td>{{data.status_core}}</td>
                                           <td>{{data.missing_status}}</td>  
                                           <td></td>                                          
-
-                                          <td>
-                                            <button type="button" class="btn btn-primary-outline" 
-                                            data-dpr='{{data.dpr}}'  
-                                            data-tyar='{{data.tyar}}'
-                                            data-mp='{{data.mp}}'
-                                            data-a_s='{{data.a_s}}'
-                                            data-typ='{{data.typ}}'
-                                            data-mrp_element='{{data.mrp_element}}'
-                                            data-delivery_qty='{{data.delivery_qty}}'
-                                            data-num_parcel='{{data.num_parcel}}'
-                                            data-warehouse_stock='{{data.warehouse_stock}}'
-                                            data-workshop_stock='{{data.workshop_stock}}'
-                                            data-stock_zpush='{{data.stock_zpush}}'
-                                            data-stock_quality='{{data.stock_quality}}'
-                                            data-other_stocks='{{data.other_stocks}}'
-                                            data-ongoing_po='{{data.ongoing_po}}'
-
-                                            {% comment %} data-validated_delivery_date='{{data.validated_delivery_date}}'
-                                             {% endcomment %}
-                                            {% comment %} data-confirmed_quantity='{{data.confirmed_quantity}}' {% endcomment %}
-                                            {% comment %} data-vendor_name='{{data.vendor_name}}' {% endcomment %}
-                                            data-toggle="modal" data-target="#viewall">
-                                              <i class="fa-regular fa-folder-open"></i>
-                                            </button>
-                                          </td>
                                           {%empty%}
                                           <tr><td colspan='15' style='text-align:center'>No Data available</td></tr>      
                                       {% endfor %}     

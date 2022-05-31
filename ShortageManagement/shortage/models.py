@@ -446,15 +446,3 @@ class Apro_spec(Soft_delete):#Model For  apro spec
     uploaded_at=models.DateTimeField(null=True)
     appro_type=models.CharField(max_length=30,null=True) #Type appro
     division = models.IntegerField(null=True) #Division
-
-
-
-    
-
-
-
-
-        
-
-
-        
