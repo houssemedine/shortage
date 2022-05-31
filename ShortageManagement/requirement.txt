@@ -1,6 +1,0 @@
-#To delete
-#Admin LTE for frontend templates
-psycopg2
-openpyxl
-pandas
-
