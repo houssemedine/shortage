@@ -32,8 +32,7 @@
                                               </button>
                                             </td> 
                                             <td>
-                                                <!-- <a href ="{% url 'delete_file' data.year data.week namefile%}" data-toggle="tooltip" data-original-title="Delete file" ><i class="fa-regular fa-trash-can"  style="color:red" ></i></a> -->
-                                                <button type="button" class="btn btn-danger-outline" data-namefile='{{namefile}}' data-week='{{week}}' data-week='{{year}}'  data-toggle="modal" data-target="#deleteModel">
+                                                <button type="button" class="btn btn-danger-outline" data-year='{{data.year}}'  data-week='{{data.week}}' data-namefile='{{namefile}}' data-toggle="modal" data-target="#deleteModel">
                                                     <i class="fa-regular fa-trash-can"  style="color:red"></i>
                                                 </button>
                                              </td>  
@@ -72,10 +71,8 @@
       var namefile = $(event.relatedTarget).data('namefile');
       var year = $(event.relatedTarget).data('year');
       var week = $(event.relatedTarget).data('week');
-
-
-      $(this).find(".modal-body").text('Are you sure to delete file number: '+namefile);
-      document.getElementById("deletelink").href="/administration/delete_file/"+year+week+namefile; 
+      $(this).find(".modal-body").text('Are you sure to delete file : '+namefile+year);
+      document.getElementById("deletelink").href="/administration/delete_file/"+year+"/"+week+"/"+namefile; 
     });
   
    $(document).ready(function(){

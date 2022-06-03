@@ -374,6 +374,108 @@ class MDMA(models.Model):#Model For FIle MDMA
     forecast_delivery_time= models.CharField(max_length=30,null=True)#Délai prév. livrais.
     take_into_account_the_expected_delivery_time= models.CharField(max_length=30,null=True)#Tenir cpte du délai prév.livr.
 
+class Z_SC_P_0004(models.Model):#Model For FIle Z_SC_P_0004
+    year=models.IntegerField(null=True)
+    week=models.IntegerField(null=True)
+    uploaded_by=models.IntegerField(null=True)
+    uploaded_at=models.DateTimeField(null=True)  
+    notice=models.CharField(max_length=30,null=True) #avis
+    vendor = models.CharField(max_length=20,null=True)  #fornisseur	
+    supplier_account_number=models.CharField(max_length=50,null=True) #Numéro de compte du fournisseur
+    created_on=models.DateTimeField(null=True) #Saisi le  
+    created_by= models.CharField(max_length=30,null=True) #Saisi par      
+    system_status =models.CharField(max_length=20,null=True) #systeme status
+    division = models.IntegerField(null=True)  #Div
+    gac= models.CharField(max_length=30,null=True)#GAc
+    purchase_document = models.CharField(null=True,max_length=30)  #Document d'achat
+    poste = models.CharField(null=True,max_length=30)              #Poste	
+    material= models.CharField(max_length=30,null=True) #article	
+    num_material= models.CharField(max_length=100,null=True) # numero article	
+    reference=models.CharField(max_length=100,null=True) #Numéro de réf.
+    date=models.DateTimeField(null=True) #date
+    updated_on=models.DateTimeField(null=True)#modifer le  
+    updated_by=models.CharField(max_length=100,null=True)#modifer par
+
+
+class Z_SC_M_0002(models.Model):#Model For FIle Z_SC_M_0002
+    year=models.IntegerField(null=True)
+    week=models.IntegerField(null=True)
+    uploaded_by=models.IntegerField(null=True)
+    uploaded_at=models.DateTimeField(null=True)
+    material= models.CharField(max_length=30,null=True) #article	
+    num_material= models.CharField(max_length=100,null=True) # numero article	
+    division = models.IntegerField(null=True)  #Div
+    orga=models.CharField(max_length=30,null=True) #OrgA
+    tyar= models.CharField(max_length=30,null=True)	#TyAr
+    sa=models.CharField(max_length=30,null=True) #sa
+    a_s1= models.CharField(max_length=30,null=True)#A.S
+    fra=models.CharField(max_length=10,null=True)#FrA
+    vendor = models.CharField(max_length=20,null=True)  #fornisseur	
+    name1=models.CharField(max_length=50,null=True) #nom 1
+    contract =models.CharField(max_length=30,null=True) #Contrat
+    post=models.CharField(null=True,max_length=30)              #Poste	
+    purchase_info=models.CharField(null=True,max_length=30) #Infos-ach.
+    uq1 = models.CharField(max_length=30,null=True)#UQ
+    gest1=models.CharField(max_length=30,null=True)#Gest.
+    val_arrondie =models.FloatField(null=True)
+    uq2= models.CharField(max_length=30,null=True)#UQ
+    orig=models.CharField(max_length=30,null=True) #Orig
+    gac1 =models.CharField(max_length=30,null=True)#GAc
+    tps_de_recep=models.CharField(max_length=30,null=True)#Tps de recep. (Art.)
+    dpl=models.CharField(max_length=30,null=True)#DPL (Art.)
+    uac1=models.CharField(max_length=30,null=True)#UAc (Art.)
+    px_busgt_cours=models.FloatField(null=True)#Px budgt.cours (Art.)
+    dev1 =models.CharField(max_length=30,null=True)#Dev.
+    pbudg_prec=models.FloatField(null=True)#PBudg.préc. (Art.)
+    dev2=models.CharField(max_length=30,null=True)#Dev.
+    futur_budget_price=models.FloatField(null=True) #PrixBdgtFutur (Art.)
+    dev3=models.CharField(max_length=30,null=True)#Dev.
+    par1 =models.IntegerField(null=True)#Par (Art.)
+    cival =models.CharField(max_length=30,null=True)#ClVal (Art.)
+    por =models.CharField(max_length=30,null=True)#POr (FIA)
+    sgf =models.CharField(max_length=30,null=True)#SGF (FIA)
+    num_material_fourn1=models.CharField(max_length=100,null=True) #Numéro article fourn. (FIA)
+    gac2=models.CharField(max_length=30,null=True)#GAc
+    dpr1= models.IntegerField(null=True)#DPr
+    net_price = models.FloatField(null=True) #Prix net
+    dev4=models.CharField(max_length=30,null=True)#Dev.
+    par2=models.IntegerField(null=True)#Par (FIA)
+    inctm =models.CharField(max_length=30,null=True)#Inctm (FIA)
+    incpterms =models.CharField(max_length=50,null=True)#Incoterms2 (FIA)
+    qte_standard =models.FloatField(null=True)#Qté standard (FIA)
+    uac2 =models.CharField(max_length=30,null=True)#UAc (FIA)
+    qte_min =models.FloatField(null=True)#Qté minimum (FIA)
+    uac3=models.CharField(max_length=30,null=True)#UAc (FIA)
+    name2=models.IntegerField(null=True)#Dénom. (FIA)
+    uac4=models.CharField(max_length=30,null=True)#UAc (FIA)
+    corr=models.IntegerField(null=True)#Corr. (FIA)
+    post_type=models.CharField(max_length=30,null=True)#Type Poste (Doc achat)
+    target_qte=models.FloatField(null=True)#Qté cible (doc achat)
+    uac5=models.CharField(max_length=30,null=True)#UAc
+    gac3=models.CharField(max_length=30,null=True)#GAc (Doc achat)
+    price_net=models.FloatField(null=True)#Prix net (doc achat)
+    dev5=models.CharField(max_length=30,null=True)#Dev.(Doc achat)
+    dev6=models.CharField(max_length=30,null=True)#Dev.(Doc achat)
+    par3=models.IntegerField(null=True)#Par (Doc achat)
+    i=models.CharField(max_length=30,null=True)#I (Doc Achat)
+    num_material_fourn2=models.CharField(max_length=100,null=True)#Numéro art. fourn. (Doc achat)
+    tre=models.FloatField(null=True)#Tré (Doc achat)
+    tps_fab_ext=models.FloatField(null=True)#Tps Fab ext (Doc achat)
+    inctm_contract=models.CharField(max_length=30,null=True)#Inctm Contrat
+    inctm_contract2=models.CharField(max_length=30,null=True)#Incoterms2 Contrat
+    gac4=models.CharField(max_length=30,null=True)#GAc (Fournisseur)
+    dev7=models.CharField(max_length=30,null=True)#Dev. (Fournisseur)
+    inctm2=models.CharField(max_length=30,null=True)#Inctm (Fournisseur)
+    incoterms2=models.CharField(max_length=30,null=True)#Incoterms2 (Fournisseur)
+    grpi1= models.CharField(max_length=30,null=True) #GrPI
+    abc	= models.CharField(max_length=30,null=True)#ABC
+    planning_unit= models.CharField(max_length=30,null=True)#Unité plan.
+    gest2=models.CharField(max_length=30,null=True)#Gest.
+    a_s2= models.CharField(max_length=30,null=True)#A.S
+    dpr2= models.IntegerField(null=True)#DPr
+    grpi2= models.CharField(max_length=30,null=True) #GrPI
+    apsc= models.CharField(max_length=30,null=True)#ApSC
+    num_tarif_dnr= models.CharField(max_length=30,null=True)#N°TarifDnr
 
 class SoftDeleteManager(models.Manager): #Manager to softdelete Model
     # def deleted_object(self):

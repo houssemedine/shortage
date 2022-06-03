@@ -5,5 +5,5 @@ openpyxl
 pandas
 django-crispy-forms
 django-bootstrap-icons
-django-htmx
+# django-htmx
 

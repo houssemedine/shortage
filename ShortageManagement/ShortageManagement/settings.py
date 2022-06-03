@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'administration',
     'crispy_forms',
     'django_bootstrap_icons',
-    "django_htmx"
+    # "django_htmx"
     
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -20,7 +20,7 @@ def file_details(request,namefile):
 
 def delete_file(request,week,year,namefile):#To delete file
     Model=apps.get_model('shortage',namefile) #to get models from shortage
-    data=Model.objects.filter(week=week,year=year).order_by('year')
+    data=Model.objects.filter(year=year,week=week).order_by('year')
     data.delete()
     return redirect('file_details',namefile=namefile)
 

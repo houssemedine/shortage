@@ -1,7 +1,5 @@
 # Create your views here.
-from asyncio.windows_events import NULL
 from io import StringIO
-from turtle import st
 from unittest import result
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -21,19 +19,19 @@ from django.contrib.auth.models import User
 
 from shortage.models import *
 #function to upload files
-
-
 def upload(request):
-    #Delete all data before upload
-    # MB52.objects.all().delete()
-    # SE16N_CEPC.objects.all().delete()
-    # SE16N_T001L.objects.all().delete()
-    # SE16N_T024.objects.all().delete()
-    # ZMM_CARNET_CDE_IS.objects.all().delete()
-    # Stock_transit.objects.all().delete()
-    # MDMA.objects.all().delete()
-    # ART_MARA_MARC.objects.all().delete()
-    # ZPP_MD_Stock.objects.all().delete()
+    # Delete all data before upload
+    MB52.objects.all().delete()
+    SE16N_CEPC.objects.all().delete()
+    SE16N_T001L.objects.all().delete()
+    SE16N_T024.objects.all().delete()
+    ZMM_CARNET_CDE_IS.objects.all().delete()
+    Stock_transit.objects.all().delete()
+    MDMA.objects.all().delete()
+    ART_MARA_MARC.objects.all().delete()
+    ZPP_MD_Stock.objects.all().delete()
+    Z_SC_M_0002.objects.all().delete()
+    Z_SC_P_0004.objects.all().delete()
     uploaded_files(request)  #call function to upload files
     return redirect ('files_list')
 
@@ -62,6 +60,8 @@ def uploaded_files(request):
                 "2020":r"C:\Users\bibas\Downloads\Input SAP\LIP MD STOCK.xlsx",
                 "2300":r"C:\Users\bibas\Downloads\Input SAP\MEX MD STOCK.xlsx"
             } 
+            file_zscm=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\Z_SC_M_0002.xlsx')
+            file_zscp=pathlib.Path(r'C:\Users\bibas\Downloads\Input SAP\Z_SC_P_00004.xlsx')
             # zpp_md_stock=[
             #     r"C:\Users\bibas\Downloads\Input SAP\2000_ZPP_MD_STOCK.xlsx"
             #     r"C:\Users\bibas\Downloads\Input SAP\2010_ZPP_MD_STOCK.xlsx"
@@ -89,12 +89,14 @@ def uploaded_files(request):
             if (file_mb52.exists()   and  file_se16ncepc.exists() and file_se16nt001l.exists() and file_se16nt024.exists() and file_zmm.exists() and file_st.exists() and file_art.exists() and file_md.exists()):
                 import_file_SE16N_T001L(conn,file_se16nt001l,year,week,uploded_by,uploded_at)
                 import_file_MB52(conn,file_mb52,year,week,uploded_by,uploded_at)
-                import_file_SE16N_CEPC(conn,file_se16ncepc,year,week,uploded_by,uploded_at)
-                import_file_SE16N_T024(conn,file_se16nt024,year,week,uploded_by,uploded_at)
+                import_file_SE16N_CEPC(conn,file_se16ncepc,year,week,uploded_by,uploded_at)    
+                import_file_SE16N_T024(conn,file_se16nt024,year,week,uploded_by,uploded_at)    
                 import_file_ART_MARA_MARC(conn,file_art,year,week,uploded_by,uploded_at)
                 import_file_ZMM_CARNET_CDE_IS(conn,file_zmm,year,week,uploded_by,uploded_at)
                 import_file_Stock_transit(conn,file_st,year,week,uploded_by,uploded_at)
                 import_file_MDMA(conn,file_md,year,week,uploded_by,uploded_at)
+                import_Z_SC_P_0004(conn,file_zscp,year,week,uploded_by,uploded_at)
+                import_Z_SC_M_0002(conn,file_zscm,year,week,uploded_by,uploded_at)
                 for division,file in zpp_md_stock.items():
                     import_file_ZPP_MD_Stock(conn,division,file,year,week,uploded_by,uploded_at)
             else:
@@ -141,7 +143,7 @@ def import_file_MB52(con,file,year,week,username,uploaded_at):
     df=df.groupby(['year','week','material','division','stock_type']).agg({'value_free_use':'sum'}).reset_index()
 
     print(df)
-    df.to_excel('mb52.xlsx')
+    # df.to_excel('mb52.xlsx')
     df=df.to_csv(index=False,header=None) #To convert to csv
 
     mb=StringIO()
@@ -496,6 +498,8 @@ def import_file_ZPP_MD_Stock(con,division,file,year,week,username,uploaded_at):
     # else:
     #     df['need_past']=0
     #Cconvert to csv 
+    print(df)
+
     df=df.to_csv(index=False,sep='|',header=None)  
     ZPP=StringIO()
     ZPP.write(df)
@@ -725,14 +729,14 @@ def import_file_ART_MARA_MARC(con,file,year,week,username,uploaded_at):
 #function for import file MDMA
 def import_file_MDMA(con,file,year,week,username,uploaded_at):
     #Read file
-    df = pd.read_excel(file,names=['material','planning_unit','division', 'planning_profile','planning_type','manager','planning_group','order_point','planning_rate','fixed_planning_horizon', 'lot_size_calculation_key','rounding_profile', 'rounding_value','minimum_lot_size', 'maximum_lot_size','maximum_stock','cycle',	'rejects_ss_ens','special_supply','production_store','store_for_external_supply','planning_calendar','safety_stock','coverage_profile', 'safety_stock_actual_stock','fixed_lot_size','fixed_lot_costs',	'storage_cost_code','service_rate','forecast_profile','ref_cons_val', 'un_plan_cons','au', 'multiplier',	'suppr_indicator', 'prof_per_sec','dependent_needs_planner','reset_auto','management_status','correction_pow','safety_time', 'for_apo','forecast_delivery_time','take_into_account_the_expected_delivery_time']) # to read file excel
+    df = pd.read_excel(file,names=['material','planning_unit','division','planning_profile','planning_type','manager','planning_group','order_point','planning_rate','fixed_planning_horizon','lot_size_calculation_key','rounding_profile','rounding_value','minimum_lot_size','maximum_lot_size','maximum_stock','cycle','rejects_ss_ens','special_supply','production_store','store_for_external_supply','planning_calendar','safety_stock','coverage_profile','safety_stock_actual_stock','fixed_lot_size','fixed_lot_costs','storage_cost_code','service_rate','forecast_profile','ref_cons_val','un_plan_cons','au','multiplier','suppr_indicator','prof_per_sec','dependent_needs_planner','reset_auto','management_status','correction_pow','safety_time','for_apo','forecast_delivery_time','take_into_account_the_expected_delivery_time'])# to read file excel
     #insert 2 column year, week
     df.insert(0,'year',year,True)
     df.insert(1,'week',week,True)
     #insert 2 column created by, created at
     df.insert(2,'uploaded_by',username,True)
     df.insert(3,'uploaded_at',uploaded_at,True)
-
+    print(df)
     df=df.to_csv(index=False,header=None) #To convert to csv
     # print(df)
     md=StringIO()
@@ -794,6 +798,156 @@ def import_file_MDMA(con,file,year,week,username,uploaded_at):
             ],
             null='',
             sep=','
+        )
+    con.commit()
+
+def import_Z_SC_P_0004(con,file,year,week,username,uploaded_at):
+    #Read file
+    df = pd.read_excel(file,names=['notice','vendor','supplier_account_number','created_on','created_by','system_status','division','gac','purchase_document','poste','material','num_material','reference','date','updated_by','updated_on']) # to read file excel
+    #insert 2 column year, week
+    df.insert(0,'year',year,True)
+    df.insert(1,'week',week,True)
+    #insert 2 column created by, created at
+    df.insert(2,'uploaded_by',username,True)
+    df.insert(3,'uploaded_at',uploaded_at,True)
+    print(df)
+    df=df.to_csv(index=False,sep=';',header=None) #To convert to csv
+    # print(df)
+    zscp=StringIO()
+    zscp.write(df)
+    zscp.seek(0)
+    with con.cursor() as curs:
+        curs.copy_from(
+            file=zscp,
+            table="shortage_z_sc_p_0004",
+            columns=[
+                'year',
+                'week',
+                'uploaded_by',
+                'uploaded_at',
+                'notice',
+                'vendor',
+                'supplier_account_number',
+                'created_on',
+                'created_by',
+                'system_status',
+                'division',
+                'gac',
+                'purchase_document',
+                'poste',
+                'material',
+                'num_material',
+                'reference',
+                'date',
+                'updated_on',
+                'updated_by',
+                ],
+            null='',
+            sep=';'
+        )
+    con.commit()
+
+def import_Z_SC_M_0002(con,file,year,week,username,uploaded_at):
+       #Read file
+    df = pd.read_excel(file,names=['material','num_material','division','orga','tyar','sa','a_s','fra','vendor','name1','contract','post','purchase_info','uq1','gest1','val_arrondie','uq2','orig','gac1','tps_de_recep','dpl','uac1','px_busgt_cours','dev1','pbudg_prec','dev2','futur_budget_price','dev3','par1','cival','por','sgf','num_material_fourn','gac2','dpr1','net_price','dev4','par2','inctm','incpterms','qte_standard','uac2','qte_min','uac3','name2','uac4','corr','post_type','target_qte','uac5','gac3','price_net','dev5','dev6','par3','i','num_material_fourn','tre','tps_fab_ext','inctm_contract','inctm_contract2','gac4','dev7','inctm2','incoterms2','grpi1','abc','planning_unit','gest2','a_s2','dpr2','grpi2','apsc','num_tarif_dnr',]) # to read file excel
+    #insert 2 column year, week
+    df.insert(0,'year',year,True)
+    df.insert(1,'week',week,True)
+    #insert 2 column created by, created at
+    df.insert(2,'uploaded_by',username,True)
+    df.insert(3,'uploaded_at',uploaded_at,True)
+    print(df)
+    df=df.to_csv(index=False,sep=';',header=None) #To convert to csv
+    # print(df)
+    zscm=StringIO()
+    zscm.write(df)
+    zscm.seek(0)
+    with con.cursor() as curs:
+        curs.copy_from(
+            file=zscm,
+            table="shortage_z_sc_m_0002",
+            columns=[
+                'year',
+                'week',
+                'uploaded_by',
+                'uploaded_at',
+                'material',
+                'num_material',
+                'division',
+                'orga',
+                'tyar',
+                'sa',
+                'a_s1',
+                'fra',
+                'vendor',
+                'name1',
+                'contract',
+                'post',
+                'purchase_info',
+                'uq1',
+                'gest1',
+                'val_arrondie',
+                'uq2',
+                'orig',
+                'gac1',
+                'tps_de_recep',
+                'dpl',
+                'uac1',
+                'px_busgt_cours',
+                'dev1',
+                'pbudg_prec',
+                'dev2',
+                'futur_budget_price',
+                'dev3',
+                'par1',
+                'cival',
+                'por',
+                'sgf',
+                'num_material_fourn1',
+                'gac2',
+                'dpr1',
+                'net_price',
+                'dev4',
+                'par2',
+                'inctm',
+                'incpterms',
+                'qte_standard',
+                'uac2',
+                'qte_min',
+                'uac3',
+                'name2',
+                'uac4',
+                'corr',
+                'post_type',
+                'target_qte',
+                'uac5',
+                'gac3',
+                'price_net',
+                'dev5',
+                'dev6',
+                'par3',
+                'i',
+                'num_material_fourn2',
+                'tre',
+                'tps_fab_ext',
+                'inctm_contract',
+                'inctm_contract2',
+                'gac4',
+                'dev7',
+                'inctm2',
+                'incoterms2',
+                'grpi1',
+                'abc',
+                'planning_unit',
+                'gest2',
+                'a_s2',
+                'dpr2',
+                'grpi2',
+                'apsc',
+                'num_tarif_dnr',
+                ],
+            null='',
+            sep=';'
         )
     con.commit()
 
@@ -944,7 +1098,8 @@ def overview(request):
     # df_mb52_dict_stock_type=dict(zip(df_mb52.key,df_mb52.stock_type))
     # df_zpp['stock_type']=df_zpp['key'].map(df_mb52_dict_stock_type)
     df_mb52['stock_type']=df_mb52['stock_type'].fillna('not_defined')
-    df_mb52=df_mb52.pivot(index=['year','week','material','division'],columns=['stock_type'],values='value_free_use').reset_index()
+    # df_mb52=df_mb52.pivot(index=['year','week','material','division'],columns=['stock_type'],values='value_free_use').reset_index()
+    df_mb52=df_mb52.pivot_table(index=['year','week','material','division'],columns='stock_type',values='value_free_use', aggfunc='sum').reset_index()
     df_mb52['key']=df_mb52['year'].astype(str)+df_mb52['week'].astype(str)+df_mb52['material'].astype(str)+df_mb52['division'].astype(str)
     df_mb52_dict_other_stocks=dict(zip(df_mb52.key,df_mb52.other_stocks))
     df_mb52_dict_stock_quality=dict(zip(df_mb52.key,df_mb52.stock_quality))
